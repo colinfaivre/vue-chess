@@ -17,3 +17,7 @@ yarn build
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+pieces images
+https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
