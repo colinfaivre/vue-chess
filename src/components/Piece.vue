@@ -1,7 +1,7 @@
 <template>
   <img
     class="piece"
-    :src="require(`../assets/pieces/king_${color}.svg`)"
+    :src="require(`../assets/pieces/${type}_${color}.svg`)"
   >
 </template>
 
@@ -10,19 +10,21 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import {Prop} from 'vue-property-decorator';
 
-@Component<King>({
+@Component<Bishop>({
   components: {},
 })
-export default class King extends Vue {
-  public noteDialog: boolean = false;
-  public commentDialog: boolean = false;
-  public tab: number = 0;
-
+export default class Bishop extends Vue {
   @Prop({
       type: String,
       required: true,
   })
   public color!: String;
+
+  @Prop({
+      type: String,
+      required: true,
+  })
+  public type!: String;
 }
 </script>
 
