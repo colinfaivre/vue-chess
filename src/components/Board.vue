@@ -3,12 +3,12 @@
     <div class="board elevation-4">
       <div
         class="board-row"
-        v-for="(row, index) in board"
-        :key="index"
+        v-for="(row, rowIndex) in board"
+        :key="rowIndex"
       >
         <div
-          v-for="(cell, index) in row"
-          :key="index"
+          v-for="(cell, columnIndex) in row"
+          :key="columnIndex"
           class="cell"
           :class="`cell--${cell.color}`"
         >
@@ -16,6 +16,8 @@
             v-if="cell.piece"
             :color="cell.piece.color"
             :type="cell.piece.type"
+            :selected="cell.piece.selected"
+            :cell="{rowIndex, columnIndex}"
           />
         </div>
       </div>
@@ -24,14 +26,9 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
-import {namespace} from "vuex-class";
-const board = namespace('board');
-
-import {
-  BoardModule,
-} from '@/store/modules';
+import {Component, Vue} from "vue-property-decorator";
+import {namespace} from 'vuex-class';
+const boardModule = namespace('board');
 
 import Piece from "@/components/Piece.vue";
 
@@ -41,8 +38,8 @@ import Piece from "@/components/Piece.vue";
   },
 })
 export default class Board extends Vue {
-  @board.State
-  public board!:any;
+  @boardModule.State
+  private board!:any;
 }
 </script>
 
