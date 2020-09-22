@@ -431,6 +431,10 @@ export default class Board extends VuexModule {
     @Mutation
     private select(cell: any) {
         console.log(cell)
+<<<<<<< HEAD:src/store/modules/board.ts
         this.board[cell.rowIndex][cell.columnIndex].piece.selected = !this.board[cell.rowIndex][cell.columnIndex].piece.selected;
+=======
+        this.board[cell.rowIndex][cell.columnIndex].piece.selected = true;
+>>>>>>> ace59c0bd85071afbc76f5262622dcd24a32eb07:src/store/modules/board.module.ts
     }
 }
