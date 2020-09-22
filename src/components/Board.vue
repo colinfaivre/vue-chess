@@ -48,23 +48,23 @@ export default class Board extends Vue {
 
 <style scoped lang="scss">
 .board-background {
-  background-color: rgb(223, 223, 223);
+  background-color: #dfdfdf;
 }
 .board {
-  height: 800px;
-  width: 800px;
+  height: 400px;
+  width: 400px;
   background-color: #d1d1d1;
   display: flex;
 }
 .board-row {
   display: flex;
   flex-direction: column-reverse;
-  width: 800px;
+  width: 400px;
 }
 
 .cell {
-  height: 100px;
-  width: 100px;
+  height: 50px;
+  width: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -73,8 +73,6 @@ export default class Board extends Vue {
   background-color: #e2d7d7;
 }
 .cell--black {
-  height: 100px;
-  width: 100px;
-  background-color: rgb(116, 81, 78);
+  background-color: #74514e;
 }
 </style>

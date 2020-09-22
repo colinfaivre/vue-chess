@@ -30,7 +30,12 @@ export default class Bishop extends Vue {
 
 <style scoped lang="scss">
 .piece {
-  width: 90px;
-  height: 90px;
+  width: 100%;
+  height: 100%;
+
+  &:hover {
+    opacity: .5;
+    cursor: pointer;
+  }
 }
 </style>
