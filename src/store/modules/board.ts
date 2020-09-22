@@ -1,11 +1,10 @@
-import Vue from 'vue';
 import {VuexModule, Module, Mutation, Action} from 'vuex-module-decorators';
 
 @Module({
     namespaced: true,
     name: 'board',
 })
-export class BoardModule extends VuexModule {
+export default class Board extends VuexModule {
     public board = {
         a: {
             1: {
@@ -13,6 +12,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'rook',
+                    selected: true,
                 },
             },
             2: {
@@ -20,6 +20,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             3: {
@@ -43,6 +44,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             8: {
@@ -50,6 +52,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'rook',
+                    selected: false,
                 },
             },
         },
@@ -59,6 +62,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'knight',
+                    selected: false,
                 },
             },
             2: {
@@ -66,6 +70,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             3: {
@@ -89,6 +94,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             8: {
@@ -96,6 +102,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'knight',
+                    selected: false,
                 },
             },
         },
@@ -105,6 +112,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'bishop',
+                    selected: false,
                 },
             },
             2: {
@@ -112,6 +120,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'pawn',
+                    selected: true,
                 },
             },
             3: {
@@ -135,6 +144,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             8: {
@@ -142,6 +152,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'bishop',
+                    selected: false,
                 },
             },
         },
@@ -151,6 +162,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'queen',
+                    selected: false,
                 },
             },
             2: {
@@ -158,6 +170,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             3: {
@@ -181,6 +194,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             8: {
@@ -188,6 +202,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'queen',
+                    selected: false,
                 },
             },
         },
@@ -197,6 +212,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'king',
+                    selected: false,
                 },
             },
             2: {
@@ -204,6 +220,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             3: {
@@ -227,6 +244,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             8: {
@@ -234,6 +252,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'king',
+                    selected: false,
                 },
             },
         },
@@ -243,6 +262,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'bishop',
+                    selected: false,
                 },
             },
             2: {
@@ -250,6 +270,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             3: {
@@ -273,6 +294,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             8: {
@@ -280,6 +302,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'bishop',
+                    selected: false,
                 },
             },
         },
@@ -289,6 +312,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'knight',
+                    selected: false,
                 },
             },
             2: {
@@ -296,6 +320,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             3: {
@@ -319,6 +344,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             8: {
@@ -326,6 +352,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'knight',
+                    selected: false,
                 },
             },
         },
@@ -335,6 +362,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'rook',
+                    selected: false,
                 },
             },
             2: {
@@ -342,6 +370,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'white',
                     type: 'pawn',
+                    selected: false,
                 },
             },
             3: {
@@ -365,6 +394,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'pawn',
+                    selected: false,
                 }
             },
             8: {
@@ -372,6 +402,7 @@ export class BoardModule extends VuexModule {
                 piece: {
                     color: 'black',
                     type: 'rook',
+                    selected: false,
                 }
             },
         },
@@ -381,45 +412,25 @@ export class BoardModule extends VuexModule {
     //     return !!this.refreshToken;
     // }
 
-    // get isValidated(): boolean {
-    //     return !!this.account && this.account.status === 'validated';
-    // }
+    @Action({ rawError: true })
+    public selectPiece(cell: any): void {
+        this.context.commit('select', cell);
+    }
 
-    // get isPendingDetails(): boolean {
-    //     return !!this.account && this.account.status === 'pending_details';
-    // }
+    @Action({ rawError: true })
+    public move(moveInfos: any): void {
+        this.context.commit('movePiece', moveInfos);
+    }
 
-    // @Action({rawError: true})
-    // public async register(registerData: IRegisterData): Promise<IAccountResponse> {
-    //     return new Promise((rnullesolve, reject) => {
-    //         this.context.commit(REQUEST);
+    @Mutation
+    private movePiece(moveInfos: any) {
+        this.board[moveInfos.to.col][moveInfos.to.row].piece = this.board[moveInfos.from.col][moveInfos.from.row].piece;
+        this.board[moveInfos.from.col][moveInfos.from.row].piece = null;
+    }
 
-    //         (Vue.prototype as Vue).$api.account
-    //             .register(registerData)
-    //             .then((response: IAccountResponse) => {
-    //                 this.context.commit(REQUEST_SUCCESS, response);
-    //                 resolve(response);
-    //             })
-    //             .catch((error) => {
-    //                 this.context.commit(REQUEST_ERROR, error);
-    //                 reject(error);
-    //             })
-    //         ;
-    //     });
-    // }
-
-    // @Action
-    // public clearStatus() {
-    //     this.context.commit(CLEAR_STATUS);
-    // }
-
-    // @Mutation
-    // private [REQUEST]() {
-    //     this.status = 'loading';
-    // }
-
-    // @Mutation
-    // private [REQUEST_ERROR]() {
-    //     this.status = 'error';
-    // }
+    @Mutation
+    private select(cell: any) {
+        console.log(cell)
+        this.board[cell.rowIndex][cell.columnIndex].piece.selected = true;
+    }
 }
