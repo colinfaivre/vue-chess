@@ -15,7 +15,7 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { namespace } from "vuex-class"
 import { getModule } from 'vuex-module-decorators';
-import BoardModule from '@/store/modules/board';
+import { BoardModule } from '@/store/modules';
 
 @Component<Piece>({
   components: {},

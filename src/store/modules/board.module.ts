@@ -1,436 +1,550 @@
 import {VuexModule, Module, Mutation, Action} from 'vuex-module-decorators';
 
+import {
+    IBoard,
+    IRow,
+    ICell,
+    ICellPosition,
+    IPiece,
+} from '@/types';
+
+import {
+    SELECT_PIECE,
+    UNSELECT_ALL_PIECES,
+    SHOW_POSSIBLE_MOVES,
+} from '@/types/store/mutations/board.mutations';
+
 @Module({
     namespaced: true,
     name: 'board',
 })
-export default class Board extends VuexModule {
-    public board = {
-        a: {
-            1: {
-                color: 'black',
-                piece: {
-                    color: 'white',
-                    type: 'rook',
-                    selected: true,
-                },
-            },
-            2: {
-                color: 'white',
-                piece: {
-                    color: 'white',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            3: {
-                color: 'black',
-                piece: null,
-            },
-            4: {
-                color: 'white',
-                piece: null,
-            },
-            5: {
-                color: 'black',
-                piece: null,
-            },
-            6: {
-                color: 'white',
-                piece: null,
-            },
-            7: {
-                color: 'black',
-                piece: {
-                    color: 'black',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            8: {
-                color: 'white',
-                piece: {
-                    color: 'black',
-                    type: 'rook',
-                    selected: false,
-                },
-            },
-        },
-        b: {
-            1: {
-                color: 'white',
-                piece: {
-                    color: 'white',
-                    type: 'knight',
-                    selected: false,
-                },
-            },
-            2: {
-                color: 'black',
-                piece: {
-                    color: 'white',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            3: {
-                color: 'white',
-                piece: null,
-            },
-            4: {
-                color: 'black',
-                piece: null,
-            },
-            5: {
-                color: 'white',
-                piece: null,
-            },
-            6: {
-                color: 'black',
-                piece: null,
-            },
-            7: {
-                color: 'white',
-                piece: {
-                    color: 'black',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            8: {
-                color: 'black',
-                piece: {
-                    color: 'black',
-                    type: 'knight',
-                    selected: false,
-                },
-            },
-        },
-        c: {
-            1: {
-                color: 'black',
-                piece: {
-                    color: 'white',
-                    type: 'bishop',
-                    selected: false,
-                },
-            },
-            2: {
-                color: 'white',
-                piece: {
-                    color: 'white',
-                    type: 'pawn',
-                    selected: true,
-                },
-            },
-            3: {
-                color: 'black',
-                piece: null,
-            },
-            4: {
-                color: 'white',
-                piece: null,
-            },
-            5: {
-                color: 'black',
-                piece: null,
-            },
-            6: {
-                color: 'white',
-                piece: null,
-            },
-            7: {
-                color: 'black',
-                piece: {
-                    color: 'black',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            8: {
-                color: 'white',
-                piece: {
-                    color: 'black',
-                    type: 'bishop',
-                    selected: false,
-                },
-            },
-        },
-        d: {
-            1: {
-                color: 'white',
-                piece: {
-                    color: 'white',
-                    type: 'queen',
-                    selected: false,
-                },
-            },
-            2: {
-                color: 'black',
-                piece: {
-                    color: 'white',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            3: {
-                color: 'white',
-                piece: null,
-            },
-            4: {
-                color: 'black',
-                piece: null,
-            },
-            5: {
-                color: 'white',
-                piece: null,
-            },
-            6: {
-                color: 'black',
-                piece: null,
-            },
-            7: {
-                color: 'white',
-                piece: {
-                    color: 'black',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            8: {
-                color: 'black',
-                piece: {
-                    color: 'black',
-                    type: 'queen',
-                    selected: false,
-                },
-            },
-        },
-        e: {
-            1: {
-                color: 'black',
-                piece: {
-                    color: 'white',
-                    type: 'king',
-                    selected: false,
-                },
-            },
-            2: {
-                color: 'white',
-                piece: {
-                    color: 'white',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            3: {
-                color: 'black',
-                piece: null,
-            },
-            4: {
-                color: 'white',
-                piece: null,
-            },
-            5: {
-                color: 'black',
-                piece: null,
-            },
-            6: {
-                color: 'white',
-                piece: null,
-            },
-            7: {
-                color: 'black',
-                piece: {
-                    color: 'black',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            8: {
-                color: 'white',
-                piece: {
-                    color: 'black',
-                    type: 'king',
-                    selected: false,
-                },
-            },
-        },
-        f: {
-            1: {
-                color: 'white',
-                piece: {
-                    color: 'white',
-                    type: 'bishop',
-                    selected: false,
-                },
-            },
-            2: {
-                color: 'black',
-                piece: {
-                    color: 'white',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            3: {
-                color: 'white',
-                piece: null,
-            },
-            4: {
-                color: 'black',
-                piece: null,
-            },
-            5: {
-                color: 'white',
-                piece: null,
-            },
-            6: {
-                color: 'black',
-                piece: null,
-            },
-            7: {
-                color: 'white',
-                piece: {
-                    color: 'black',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            8: {
-                color: 'black',
-                piece: {
-                    color: 'black',
-                    type: 'bishop',
-                    selected: false,
-                },
-            },
-        },
-        g: {
-            1: {
-                color: 'black',
-                piece: {
-                    color: 'white',
-                    type: 'knight',
-                    selected: false,
-                },
-            },
-            2: {
-                color: 'white',
-                piece: {
-                    color: 'white',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            3: {
-                color: 'black',
-                piece: null,
-            },
-            4: {
-                color: 'white',
-                piece: null,
-            },
-            5: {
-                color: 'black',
-                piece: null,
-            },
-            6: {
-                color: 'white',
-                piece: null,
-            },
-            7: {
-                color: 'black',
-                piece: {
-                    color: 'black',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            8: {
-                color: 'white',
-                piece: {
-                    color: 'black',
-                    type: 'knight',
-                    selected: false,
-                },
-            },
-        },
-        h: {
-            1: {
-                color: 'white',
-                piece: {
-                    color: 'white',
-                    type: 'rook',
-                    selected: false,
-                },
-            },
-            2: {
-                color: 'black',
-                piece: {
-                    color: 'white',
-                    type: 'pawn',
-                    selected: false,
-                },
-            },
-            3: {
-                color: 'white',
-                piece: null,
-            },
-            4: {
-                color: 'black',
-                piece: null,
-            },
-            5: {
-                color: 'white',
-                piece: null,
-            },
-            6: {
-                color: 'black',
-                piece: null,
-            },
-            7: {
-                color: 'white',
-                piece: {
-                    color: 'black',
-                    type: 'pawn',
-                    selected: false,
-                }
-            },
-            8: {
-                color: 'black',
-                piece: {
-                    color: 'black',
-                    type: 'rook',
-                    selected: false,
-                }
-            },
-        },
-    };
+export class BoardModule extends VuexModule {
+    public hasToPlay: string = 'white';
 
+    public selectedPiece: IPiece|null = null;
+
+    public board: ICell[][] = [
+        [
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'rook',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'rook',
+                    selected: false,
+                },
+            },
+        ],
+        [
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'knight',
+                    selected: false,
+                },
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'knight',
+                    selected: false,
+                },
+            },
+        ],
+        [
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'bishop',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'bishop',
+                    selected: false,
+                },
+            },
+        ],
+        [
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'queen',
+                    selected: false,
+                },
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'queen',
+                    selected: false,
+                },
+            },
+        ],
+        [
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'king',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'king',
+                    selected: false,
+                },
+            },
+        ],
+        [
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'bishop',
+                    selected: false,
+                },
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'bishop',
+                    selected: false,
+                },
+            },
+        ],
+        [
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'knight',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'knight',
+                    selected: false,
+                },
+            },
+        ],
+        [
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'rook',
+                    selected: false,
+                },
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'white',
+                    type: 'pawn',
+                    selected: false,
+                },
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: null,
+            },
+            {
+                color: 'white',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'pawn',
+                    selected: false,
+                }
+            },
+            {
+                color: 'black',
+                possibleDestination: false,
+                piece: {
+                    color: 'black',
+                    type: 'rook',
+                    selected: false,
+                }
+            },
+        ],
+    ];
+
+    // Getter definition
     // get isLoggedIn(): boolean {
     //     return !!this.refreshToken;
     // }
 
-    @Action({ rawError: true })
-    public selectPiece(cell: any): void {
-        this.context.commit('select', cell);
+    @Mutation
+    private [UNSELECT_ALL_PIECES]() {
+        for (const row in this.board) {
+            for (const column in this.board[row]) {
+                if (this.board[row][column].piece !== null) {
+                    this.board[row][column].piece!.selected = false;
+                }
+            }
+        }
     }
-
-    @Action({ rawError: true })
-    public move(moveInfos: any): void {
-        this.context.commit('movePiece', moveInfos);
+    
+    @Mutation
+    private [SELECT_PIECE](cellPosition: ICellPosition) {
+        if (this.hasToPlay === this.board[cellPosition.rowIndex][cellPosition.columnIndex].piece!.color) {
+            this.board[cellPosition.rowIndex][cellPosition.columnIndex].piece!.selected = true;
+            this.selectedPiece = this.board[cellPosition.rowIndex][cellPosition.columnIndex].piece;
+        }
     }
 
     @Mutation
-    private movePiece(moveInfos: any) {
-        this.board[moveInfos.to.col][moveInfos.to.row].piece = this.board[moveInfos.from.col][moveInfos.from.row].piece;
-        this.board[moveInfos.from.col][moveInfos.from.row].piece = null;
+    private [SHOW_POSSIBLE_MOVES](cellPosition: ICellPosition) {
+        if (this.selectedPiece) {
+            switch (this.selectedPiece.type) {
+                case 'rook':
+                    console.log('rook');
+                    break;
+                case 'knight':
+                    console.log('knight');
+                    break;
+                case 'bishop':
+                    console.log('bishop');
+                    break;
+                case 'queen':
+                    console.log('queen');
+                    break;
+                case 'king':
+                    console.log('king');
+                    break;
+                case 'pawn':
+                    console.log('pawn', cellPosition);
+                    break;
+            }
+        }
+        
     }
 
-    @Mutation
-    private select(cell: any) {
-        console.log(cell)
-        this.board[cell.rowIndex][cell.columnIndex].piece.selected = !this.board[cell.rowIndex][cell.columnIndex].piece.selected;
+    @Action({ rawError: true })
+    public selectPiece(cellPosition: ICellPosition) {
+        this.context.commit(UNSELECT_ALL_PIECES);
+        this.context.commit(SELECT_PIECE, cellPosition);
+        this.context.commit(SHOW_POSSIBLE_MOVES, cellPosition);
     }
 }
