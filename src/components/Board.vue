@@ -1,9 +1,11 @@
 <template>
   <v-container class="fill-height d-flex flex-column justify-center board-background">
     <div class="board elevation-4">
-      <div v-if="hasToPlay === 'black'" class="has-to-play has-to-play--black">
+      <div
+        v-if="hasToPlay === 'black'"
+        class="has-to-play has-to-play--black"
+      />
 
-      </div>
       <div
         class="board-row"
         v-for="(row, rowIndex) in board"
@@ -25,13 +27,14 @@
           <div
             v-if="cell.possibleDestination"
             class="possible-destination"
-          >
-          </div>
+          />
         </div>
       </div>
 
-      <div v-if="hasToPlay === 'white'" class="has-to-play has-to-play--white">
-      </div>
+      <div
+        v-if="hasToPlay === 'white'"
+        class="has-to-play has-to-play--white"
+      />
     </div>
   </v-container>
 </template>
