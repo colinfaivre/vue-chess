@@ -8,12 +8,12 @@
 
       <div
         class="board-row"
-        v-for="(row, rowIndex) in board"
-        :key="rowIndex"
+        v-for="(column, columnIndex) in board"
+        :key="columnIndex"
       >
         <div
-          v-for="(cell, columnIndex) in row"
-          :key="columnIndex"
+          v-for="(cell, rowIndex) in column"
+          :key="rowIndex"
           class="cell"
           :class="`cell--${cell.color}`"
         >
@@ -22,8 +22,9 @@
             :color="cell.piece.color"
             :type="cell.piece.type"
             :selected="cell.piece.selected"
-            :cell="{rowIndex, columnIndex}"
+            :cell="{columnIndex, rowIndex}"
           />
+
           <div
             v-if="cell.possibleDestination"
             class="possible-destination"
