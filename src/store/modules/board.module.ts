@@ -1,8 +1,6 @@
 import {VuexModule, Module, Mutation, Action} from 'vuex-module-decorators';
 
 import {
-    IBoard,
-    IRow,
     ICell,
     ICellPosition,
     IPiece,
@@ -12,6 +10,7 @@ import {
     SELECT_PIECE,
     UNSELECT_ALL_PIECES,
     SHOW_POSSIBLE_MOVES,
+    HIDE_POSSIBLE_DESTINATIONS,
 } from '@/types/store/mutations/board.mutations';
 
 @Module({
@@ -505,13 +504,20 @@ export class BoardModule extends VuexModule {
             }
         }
     }
+
+    @Mutation
+    private [HIDE_POSSIBLE_DESTINATIONS]() {
+        for (const row in this.board) {
+            for (const column in this.board[row]) {
+                this.board[row][column].possibleDestination = false;
+            }
+        }
+    }
     
     @Mutation
     private [SELECT_PIECE](cellPosition: ICellPosition) {
-        if (this.hasToPlay === this.board[cellPosition.rowIndex][cellPosition.columnIndex].piece!.color) {
-            this.board[cellPosition.rowIndex][cellPosition.columnIndex].piece!.selected = true;
-            this.selectedPiece = this.board[cellPosition.rowIndex][cellPosition.columnIndex].piece;
-        }
+        this.board[cellPosition.rowIndex][cellPosition.columnIndex].piece!.selected = true;
+        this.selectedPiece = this.board[cellPosition.rowIndex][cellPosition.columnIndex].piece;
     }
 
     @Mutation
@@ -535,6 +541,13 @@ export class BoardModule extends VuexModule {
                     break;
                 case 'pawn':
                     console.log('pawn', cellPosition);
+                    if (this.hasToPlay === 'white') {
+                        this.board[cellPosition.rowIndex][cellPosition.columnIndex + 1].possibleDestination = true;
+                        this.board[cellPosition.rowIndex][cellPosition.columnIndex + 2].possibleDestination = true;
+                    } else {
+                        this.board[cellPosition.rowIndex][cellPosition.columnIndex - 1].possibleDestination = true;
+                        this.board[cellPosition.rowIndex][cellPosition.columnIndex - 2].possibleDestination = true;
+                    }
                     break;
             }
         }
@@ -544,7 +557,10 @@ export class BoardModule extends VuexModule {
     @Action({ rawError: true })
     public selectPiece(cellPosition: ICellPosition) {
         this.context.commit(UNSELECT_ALL_PIECES);
-        this.context.commit(SELECT_PIECE, cellPosition);
-        this.context.commit(SHOW_POSSIBLE_MOVES, cellPosition);
+        this.context.commit(HIDE_POSSIBLE_DESTINATIONS);
+        if (this.hasToPlay === this.board[cellPosition.rowIndex][cellPosition.columnIndex].piece!.color) {
+            this.context.commit(SELECT_PIECE, cellPosition);
+            this.context.commit(SHOW_POSSIBLE_MOVES, cellPosition);
+        }
     }
 }
