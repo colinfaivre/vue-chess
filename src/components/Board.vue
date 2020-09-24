@@ -28,6 +28,7 @@
           <div
             v-if="cell.possibleDestination"
             class="possible-destination"
+            @click="moveTo({columnIndex, rowIndex})"
           />
         </div>
       </div>
@@ -43,10 +44,13 @@
 <script lang="ts">
 import {Component, Vue} from "vue-property-decorator";
 import {namespace} from 'vuex-class';
+import { getModule } from 'vuex-module-decorators';
+import { BoardModule } from '@/store/modules';
 const boardModule = namespace('board');
 
 import {
     ICell,
+    ICellPosition,
 } from '@/types';
 
 import Piece from "@/components/Piece.vue";
@@ -62,6 +66,11 @@ export default class Board extends Vue {
 
   @boardModule.State
   private hasToPlay!: string;
+
+  public moveTo(cellPosition: ICellPosition) {
+    const boardModule = getModule(BoardModule, this.$store);
+    boardModule.moveTo(cellPosition);
+  }
 }
 </script>
 

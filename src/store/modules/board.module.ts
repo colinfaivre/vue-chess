@@ -1,4 +1,4 @@
-import {VuexModule, Module, Mutation, Action} from 'vuex-module-decorators';
+import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 
 import {
     ICell,
@@ -11,6 +11,8 @@ import {
     UNSELECT_ALL_PIECES,
     SHOW_POSSIBLE_MOVES,
     HIDE_POSSIBLE_DESTINATIONS,
+    REMOVE_PIECE_FROM,
+    ADD_PIECE_TO,
 } from '@/types/store/mutations/board.mutations';
 
 import {
@@ -39,6 +41,20 @@ export class BoardModule extends VuexModule {
     //     return !!this.refreshToken;
     // }
 
+    get selectedPieceCurrentPosion() {
+        for (const column in this.board) {
+            for (const row in this.board[column]) {
+                if (this.board[column][row].piece !== null && this.board[column][row].piece!.selected === true) {
+                    console.log("test", {columnIndex: column, rowIndex: row});
+                    return {
+                        columnIndex: column,
+                        rowIndex: row
+                    };
+                }
+            }
+        }
+    }
+
     @Mutation
     private [UNSELECT_ALL_PIECES]() {
         for (const row in this.board) {
@@ -63,6 +79,11 @@ export class BoardModule extends VuexModule {
     private [SELECT_PIECE](cellPosition: ICellPosition) {
         this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece!.selected = true;
         this.selectedPiece = this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece;
+    }
+
+    @Mutation
+    private [REMOVE_PIECE_FROM](cellPosition: ICellPosition) {
+        this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece = null;
     }
 
     @Mutation
@@ -123,16 +144,28 @@ export class BoardModule extends VuexModule {
                     break;
             }
         }
-        
     }
 
     @Action({ rawError: true })
-    public selectPiece(cellPosition: ICellPosition) {
+    public selectPiece(from: ICellPosition) {
         this.context.commit(UNSELECT_ALL_PIECES);
         this.context.commit(HIDE_POSSIBLE_DESTINATIONS);
-        if (this.hasToPlay === this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece!.color) {
-            this.context.commit(SELECT_PIECE, cellPosition);
-            this.context.commit(SHOW_POSSIBLE_MOVES, cellPosition);
+
+        if (this.hasToPlay === this.board[from.columnIndex][from.rowIndex].piece!.color) {
+            this.context.commit(SELECT_PIECE, from);
+            this.context.commit(SHOW_POSSIBLE_MOVES, from);
         }
+    }
+
+    @Action({ rawError: true })
+    public moveTo(destination: ICellPosition) {
+        
+        const startPosition = this.selectedPieceCurrentPosion;
+        
+        // this.context.commit(ADD_PIECE_TO, destination);
+        this.context.commit(REMOVE_PIECE_FROM, this.selectedPieceCurrentPosion);
+
+        this.context.commit(UNSELECT_ALL_PIECES);
+        this.context.commit(HIDE_POSSIBLE_DESTINATIONS);
     }
 }
