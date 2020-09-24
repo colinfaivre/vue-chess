@@ -75,9 +75,6 @@ export default class Board extends Vue {
 </script>
 
 <style scoped lang="scss">
-.board-background {
-  background-color: #dfdfdf;
-}
 .board {
   height: 400px;
   width: 400px;
@@ -86,12 +83,14 @@ export default class Board extends Vue {
   position: relative;
 }
 .has-to-play {
-  
   position: absolute;
   height: 5px;
+  border-radius: 2.5px;
   opacity: .6;
   width: 100%;
   background-color: #65d6a7;
+  filter: blur(1px);
+  z-index: 0;
 
   &--black {
     top: -5px;
@@ -118,7 +117,7 @@ export default class Board extends Vue {
     background-color: #e2d7d7;
   }
   &--black {
-    background-color: #74514e;
+    background-color:#526670;
   }
 
   .possible-destination {

@@ -147,11 +147,7 @@ const initialBoard = [
         {
             color: 'black',
             possibleDestination: false,
-            piece: {
-                color: 'white',
-                type: 'knight',
-                selected: false,
-            },
+            piece: null,
         },
         {
             color: 'white',
@@ -325,11 +321,7 @@ const initialBoard = [
         {
             color: 'white',
             possibleDestination: false,
-            piece: {
-                color: 'white',
-                type: 'king',
-                selected: false,
-            },
+            piece: null,
         },
         {
             color: 'black',

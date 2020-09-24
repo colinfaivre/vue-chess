@@ -10,6 +10,11 @@ export interface IPiece {
     selected: boolean,
 }
 
+export  interface IPath {
+    from: ICellPosition,
+    to: ICellPosition,
+}
+
 export interface ICellPosition {
     rowIndex: number,
     columnIndex: number,

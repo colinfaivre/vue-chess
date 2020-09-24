@@ -2,6 +2,7 @@ import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
 
 import {
     ICell,
+    IPath,
     ICellPosition,
     IPiece,
 } from '@/types';
@@ -12,7 +13,9 @@ import {
     SHOW_POSSIBLE_MOVES,
     HIDE_POSSIBLE_DESTINATIONS,
     REMOVE_PIECE_FROM,
-    ADD_PIECE_TO,
+    ADD_PIECE,
+    TOGGLE_PLAYER,
+    INCREMENT_ROUND,
 } from '@/types/store/mutations/board.mutations';
 
 import {
@@ -35,13 +38,9 @@ export class BoardModule extends VuexModule {
     public board: ICell[][] = initialBoard;
     public hasToPlay: string = 'white';
     public selectedPiece: IPiece|null = null;
+    public round: number = 1;
 
-    // Getter definition
-    // get isLoggedIn(): boolean {
-    //     return !!this.refreshToken;
-    // }
-
-    get selectedPieceCurrentPosion() {
+    get selectedPiecePosition() {
         for (const column in this.board) {
             for (const row in this.board[column]) {
                 if (this.board[column][row].piece !== null && this.board[column][row].piece!.selected === true) {
@@ -74,11 +73,16 @@ export class BoardModule extends VuexModule {
             }
         }
     }
-    
+
     @Mutation
     private [SELECT_PIECE](cellPosition: ICellPosition) {
         this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece!.selected = true;
         this.selectedPiece = this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece;
+    }
+
+    @Mutation
+    private [ADD_PIECE](path: IPath) {
+        this.board[path.to.columnIndex][path.to.rowIndex].piece = this.board[path.from.columnIndex][path.from.rowIndex].piece;
     }
 
     @Mutation
@@ -87,11 +91,25 @@ export class BoardModule extends VuexModule {
     }
 
     @Mutation
+    private [TOGGLE_PLAYER]() {
+        if (this.hasToPlay === 'white') {
+            this.hasToPlay = 'black';
+        } else {
+            this.hasToPlay = 'white';
+        }
+    }
+
+    @Mutation
+    private [INCREMENT_ROUND]() {
+        this.round++;
+    }
+
+    @Mutation
     private [SHOW_POSSIBLE_MOVES](cellPosition: ICellPosition) {
         const validateMove = (columnMove: number, rowMove: number): void => {
             const destinationCellIsInRow = cellPosition.rowIndex + rowMove >= 0 && cellPosition.rowIndex + rowMove <= 7;
             const destinationCellIsInColumn = cellPosition.columnIndex + columnMove >= 0 && cellPosition.columnIndex + columnMove <= 7;
-            
+
             if (destinationCellIsInRow && destinationCellIsInColumn) {
                 const destinationCellIsFree = this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].piece === null;
                 if (destinationCellIsFree) {
@@ -158,14 +176,18 @@ export class BoardModule extends VuexModule {
     }
 
     @Action({ rawError: true })
-    public moveTo(destination: ICellPosition) {
-        
-        const startPosition = this.selectedPieceCurrentPosion;
-        
-        // this.context.commit(ADD_PIECE_TO, destination);
-        this.context.commit(REMOVE_PIECE_FROM, this.selectedPieceCurrentPosion);
+    public moveTo(endPosition: ICellPosition) {
+        const startPosition = this.selectedPiecePosition;
 
+        // MOVE PIECE
+        this.context.commit(ADD_PIECE, {from: startPosition, to: endPosition});
+        this.context.commit(REMOVE_PIECE_FROM, startPosition);
+
+        // CLEAR BOARD
         this.context.commit(UNSELECT_ALL_PIECES);
         this.context.commit(HIDE_POSSIBLE_DESTINATIONS);
+
+        this.context.commit(INCREMENT_ROUND);
+        this.context.commit(TOGGLE_PLAYER);
     }
 }

@@ -1,22 +1,12 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="brown darken-3"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-icon>
-          mdi-chess-knight
-        </v-icon>
+    <the-app-bar/>
 
-        <h3>Vue-chess</h3>
-      </div>
+    <the-drawer-left/>
 
-      <v-spacer/>
-    </v-app-bar>
+    <the-drawer-right/>
 
-    <v-main>
+    <v-main class="main">
       <board/>
     </v-main>
   </v-app>
@@ -27,14 +17,23 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import Board from './components/Board.vue';
 
+import TheDrawerLeft from "@/components/layout/TheDrawerLeft.vue";
+import TheDrawerRight from "@/components/layout/TheDrawerRight.vue";
+import TheAppBar from "@/components/layout/TheAppBar.vue";
+
 @Component<App>({
   components: {
     Board,
+    TheDrawerLeft,
+    TheDrawerRight,
+    TheAppBar,
   },
 })
-export default class App extends Vue {
-  public noteDialog: boolean = false;
-  public commentDialog: boolean = false;
-  public tab: number = 0;
-}
+export default class App extends Vue {}
 </script>
+
+<style scoped>
+.main {
+  background-color: #dfdfdf;
+}
+</style>
