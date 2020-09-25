@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer
-      v-model="drawerLeftisOpened"
+      v-model="drawerLeftIsOpened"
       app
       color="blue-grey darken-4"
       dark

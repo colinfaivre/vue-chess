@@ -2,6 +2,7 @@ export interface ICell {
     color: string,
     piece: IPiece|null,
     possibleDestination: boolean,
+    anCoords: string,
 }
 
 export interface IPiece {
