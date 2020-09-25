@@ -29,6 +29,7 @@ import {
 } from '@/data/piecesMoves';
 
 import boardSnapshotParser from '@/data/boardSnapshotParser';
+import boardSerializer from '@/data/boardSerializer';
 
 @Module({
     namespaced: true,

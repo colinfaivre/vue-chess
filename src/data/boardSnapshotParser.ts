@@ -86,6 +86,7 @@ function boardFeeder(anCoordsBoard: string[][]): ICell[][] {
 }
 
 const boardSnapshotParser = (boardSnapshot: string[]): ICell[][] => {
+    console.log(boardFeeder(adaptToAnCoords(boardSnapshot)));
     return boardFeeder(adaptToAnCoords(boardSnapshot));
 }
 
