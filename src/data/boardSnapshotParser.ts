@@ -3,29 +3,21 @@ import {
     IPiece,
 } from '@/types';
 
-let boardMap: string[] = [
-    'rnbqkbnr',
-    'pppppppp',
-    '........',
-    '........',
-    '........',
-    '........',
-    'PPPPPPPP',
-    'RNBQKBNR',
-];
-
-function boardParser(map: string[]): string[][] {
-    const parsedBoardMap: string[][] = [];
+// adaptToAnCoords() :
+// Adapt board snapshot data structure (array of strings) to
+// chess Alebric Notation (letter column / number row / from bottom-left of chessboard)
+function adaptToAnCoords(boardSnapShot: string[]): string[][] {
+    const anCoordsBoard: string[][] = [];
 
     for (let lineIndex = 0; lineIndex < 8; lineIndex++) {
         const row: string[] = [];
         for (let characterIndex = 7; characterIndex >= 0; characterIndex--) {
-            row.push(map[characterIndex][lineIndex]);
+            row.push(boardSnapShot[characterIndex][lineIndex]);
         }
-        parsedBoardMap.push(row);
+        anCoordsBoard.push(row);
     }
 
-    return parsedBoardMap;
+    return anCoordsBoard;
 }
 
 function getCellColor(columnIndex: number, rowIndex: number): string {
@@ -71,10 +63,12 @@ function getPiece(pieceCharacter: string): IPiece {
 }
 
 
-function boardFeeder(board: string[][]): ICell[][] {
-    const finalBoard: ICell[][] = [];
+// boardFeeder()
+// Fill the Algebric Notation data structure with cell data
+function boardFeeder(anCoordsBoard: string[][]): ICell[][] {
+    const parsedBoard: ICell[][] = [];
 
-    for (const [columnIndex, columnValue] of board.entries()) {
+    for (const [columnIndex, columnValue] of anCoordsBoard.entries()) {
         const column: ICell[] = [];
         for (const [rowIndex, rowValue] of columnValue.entries()) {
             const cell: ICell = {
@@ -85,12 +79,14 @@ function boardFeeder(board: string[][]): ICell[][] {
             };
             column.push(cell);
         };
-        finalBoard.push(column);
+        parsedBoard.push(column);
     }
 
-    return finalBoard;
+    return parsedBoard;
 }
 
-const initialBoard = boardFeeder(boardParser(boardMap));
+const boardSnapshotParser = (boardSnapshot: string[]): ICell[][] => {
+    return boardFeeder(adaptToAnCoords(boardSnapshot));
+}
 
-export default initialBoard;
+export default boardSnapshotParser;

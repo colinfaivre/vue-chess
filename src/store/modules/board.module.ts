@@ -28,14 +28,24 @@ import {
     QUEEN_MOVES,
 } from '@/data/piecesMoves';
 
-import initialBoard from '@/data/initialBoard';
+import boardSnapshotParser from '@/data/boardSnapshotParser';
 
 @Module({
     namespaced: true,
     name: 'board',
 })
 export class BoardModule extends VuexModule {
-    public board: ICell[][] = initialBoard;
+    public initialBoardSnapshot = [
+        'rnbqkbnr',
+        'pppppppp',
+        '........',
+        '........',
+        '........',
+        '........',
+        'PPPPPPPP',
+        'RNBQKBNR',
+    ]
+    public board: ICell[][] = boardSnapshotParser(this.initialBoardSnapshot);
     public hasToPlay: string = 'white';
     public selectedPiece: IPiece|null = null;
     public round: number = 1;
