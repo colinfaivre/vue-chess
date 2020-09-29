@@ -1,4 +1,5 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
+const stockfishWorker = new Worker('stockfish.js/stockfish.js', {type: 'module'});
 
 import {
     ICell,
@@ -200,5 +201,40 @@ export class BoardModule extends VuexModule {
 
         this.context.commit(INCREMENT_ROUND);
         this.context.commit(TOGGLE_PLAYER);
+
+        this.context.dispatch('askAIToGuessNextMove');
+    }
+
+    @Action({ rawError: true })
+    public askAIToGuessNextMove(endPosition: ICellPosition) {
+        stockfishWorker.postMessage('position startpos');
+        stockfishWorker.postMessage('go movetime 1000');
+
+        const context = this.context;
+
+        stockfishWorker.onmessage = function(e) {
+            if (e.data.split(' ')[0] === 'bestmove') {
+                context.dispatch('stockfishPlays', e.data.split(' ')[1]);
+            }
+        }
+    }
+
+    @Action({ rawError: true })
+    public initStockfish() {
+        stockfishWorker.postMessage('uci');
+        stockfishWorker.postMessage('ucinewgame');
+
+        stockfishWorker.onmessage = function(e) {
+            console.log(e.data);
+            if (e.data.split(' ')[0] === 'bestmove') {
+                console.log(e.data.split(' ')[1]);
+                
+            }
+        }
+    }
+
+    @Action({ rawError: true })
+    public stockfishPlays(move: string) {
+        console.log('stockfish plays : ', move);
     }
 }

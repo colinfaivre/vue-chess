@@ -28,6 +28,7 @@ https://www.npmjs.com/package/stockfish
 web workers in vue.js with worker-plugin from google :
 https://braincoke.fr/blog/2020/03/use-web-workers-with-vue/#web-workers
 https://github.com/GoogleChromeLabs/worker-plugin
+https://logaretm.com/blog/2019-12-21-vuex-off-mainthread/
 
 Stockfish commands :
 $stockfish

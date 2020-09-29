@@ -71,6 +71,11 @@ export default class Board extends Vue {
     const boardModule = getModule(BoardModule, this.$store);
     boardModule.moveTo(cellPosition);
   }
+
+  created() {
+    const boardModule = getModule(BoardModule, this.$store);
+    boardModule.initStockfish();
+  }
 }
 </script>
 
