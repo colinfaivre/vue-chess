@@ -7390,6 +7390,11 @@ static-extend@^0.1.1:
   resolved "https://registry.npm.taobao.org/statuses/download/statuses-1.5.0.tgz#161c7dac177659fd9811f43771fa99381478628c"
   integrity sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
 
+stockfish.js@^10.0.2:
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/stockfish.js/-/stockfish.js-10.0.2.tgz#c8206aa3b0290171ace52b463a74112ea1f83989"
+  integrity sha512-treB3AYcdvRJ9SDPOyL0R2NcEAtQgG432nStfRzR4wzVELGQ6iVoeBHwvirHTfocNOTims7XNkK3SADaocsJmQ==
+
 stream-browserify@^2.0.1:
   version "2.0.2"
   resolved "https://registry.npm.taobao.org/stream-browserify/download/stream-browserify-2.0.2.tgz#87521d38a44aa7ee91ce1cd2a47df0cb49dd660b"
@@ -8525,6 +8530,13 @@ worker-farm@^1.7.0:
   integrity sha1-JqlMU5G7ypJhUgAvabhKS/dy5ag=
   dependencies:
     errno "~0.1.7"
+
+worker-plugin@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/worker-plugin/-/worker-plugin-5.0.0.tgz#113b5fe1f4a5d6a957cecd29915bedafd70bb537"
+  integrity sha512-AXMUstURCxDD6yGam2r4E34aJg6kW85IiaeX72hi+I1cxyaMUtrvVY6sbfpGKAj5e7f68Acl62BjQF5aOOx2IQ==
+  dependencies:
+    loader-utils "^1.1.0"
 
 worker-rpc@^0.1.0:
   version "0.1.1"

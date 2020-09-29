@@ -25,8 +25,9 @@ https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
 stockfish.js library :
 https://www.npmjs.com/package/stockfish
 
-web workers in vue.js :
-https://dev.to/jcalixte/easy-web-worker-integration-in-vuejs-3ej8
+web workers in vue.js with worker-plugin from google :
+https://braincoke.fr/blog/2020/03/use-web-workers-with-vue/#web-workers
+https://github.com/GoogleChromeLabs/worker-plugin
 
 Stockfish commands :
 $stockfish
