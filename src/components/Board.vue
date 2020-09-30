@@ -28,7 +28,7 @@
           <div
             v-if="cell.possibleDestination"
             class="possible-destination"
-            @click="moveTo({columnIndex, rowIndex})"
+            @click="selectDestination({columnIndex, rowIndex})"
           />
         </div>
       </div>
@@ -67,9 +67,9 @@ export default class Board extends Vue {
   @boardModule.State
   private hasToPlay!: string;
 
-  public moveTo(cellPosition: ICellPosition) {
+  public selectDestination(cellPosition: ICellPosition) {
     const boardModule = getModule(BoardModule, this.$store);
-    boardModule.moveTo(cellPosition);
+    boardModule.selectDestination(cellPosition);
   }
 
   created() {

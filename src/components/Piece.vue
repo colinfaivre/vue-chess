@@ -2,7 +2,7 @@
   <div
     class="piece-container"
     :class="{'selected': selected}"
-    @click="selectPiece(cell)"
+    @click="selectOrigin(cell)"
   >
     <img
       class="piece"
@@ -45,9 +45,9 @@ export default class Piece extends Vue {
   })
   public cell!: object;
 
-  public selectPiece() {
+  public selectOrigin() {
     const boardModule = getModule(BoardModule, this.$store);
-    boardModule.selectPiece(this.cell);
+    boardModule.selectOrigin(this.cell);
   }
 }
 </script>

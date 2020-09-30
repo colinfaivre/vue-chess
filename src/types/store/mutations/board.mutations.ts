@@ -7,4 +7,4 @@ export const REMOVE_PIECE_FROM = '_removePieceFrom';
 export const ADD_PIECE = '_addPiece';
 export const TOGGLE_PLAYER = '_togglePlayer';
 export const INCREMENT_ROUND = '_incrementRound';
-
+export const ADD_MOVE = '_addMove';

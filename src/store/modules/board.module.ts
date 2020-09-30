@@ -1,4 +1,10 @@
 import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
+
+import {
+    getANCoords, 
+    getMoveFromAN,
+} from '@/helpers/stockfish';
+
 const stockfishWorker = new Worker('stockfish.js/stockfish.js', {type: 'module'});
 
 import {
@@ -6,6 +12,7 @@ import {
     IPath,
     ICellPosition,
     IPiece,
+    IMove,
 } from '@/types';
 
 import {
@@ -17,6 +24,7 @@ import {
     ADD_PIECE,
     TOGGLE_PLAYER,
     INCREMENT_ROUND,
+    ADD_MOVE,
 } from '@/types/store/mutations/board.mutations';
 
 import {
@@ -51,6 +59,9 @@ export class BoardModule extends VuexModule {
     public hasToPlay: string = 'white';
     public selectedPiece: IPiece|null = null;
     public round: number = 1;
+    public moves: string = '';
+    public moveStart: string|null = null;
+    public moveEnd: string|null = null;
 
     get selectedPiecePosition() {
         console.log()
@@ -58,8 +69,8 @@ export class BoardModule extends VuexModule {
             for (const row in this.board[column]) {
                 if (this.board[column][row].piece !== null && this.board[column][row].piece!.selected === true) {
                     return {
-                        columnIndex: column,
-                        rowIndex: row
+                        columnIndex: parseInt(column),
+                        rowIndex: parseInt(row)
                     };
                 }
             }
@@ -90,6 +101,7 @@ export class BoardModule extends VuexModule {
     private [SELECT_PIECE](cellPosition: ICellPosition) {
         this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece!.selected = true;
         this.selectedPiece = this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece;
+        
     }
 
     @Mutation
@@ -114,6 +126,15 @@ export class BoardModule extends VuexModule {
     @Mutation
     private [INCREMENT_ROUND]() {
         this.round++;
+    }
+
+    @Mutation
+    private [ADD_MOVE](move: IMove) {
+        this.moveStart = getANCoords(move.startPosition);
+        this.moveEnd = getANCoords(move.endPosition);
+        if (this.moveStart && this.moveEnd) {
+            this.moves += `${this.moveStart + this.moveEnd} `;
+        }
     }
 
     @Mutation
@@ -177,7 +198,7 @@ export class BoardModule extends VuexModule {
     }
 
     @Action({ rawError: true })
-    public selectPiece(from: ICellPosition) {
+    public selectOrigin(from: ICellPosition) {
         this.context.commit(UNSELECT_ALL_PIECES);
         this.context.commit(HIDE_POSSIBLE_DESTINATIONS);
 
@@ -188,12 +209,19 @@ export class BoardModule extends VuexModule {
     }
 
     @Action({ rawError: true })
-    public moveTo(endPosition: ICellPosition) {
-        const startPosition = this.selectedPiecePosition;
-
+    public move(move: IMove) {
         // MOVE PIECE
-        this.context.commit(ADD_PIECE, {from: startPosition, to: endPosition});
-        this.context.commit(REMOVE_PIECE_FROM, startPosition);
+        console.log('startPosition', move.startPosition);
+        console.log('endPosition', move.endPosition);
+
+        this.context.commit(ADD_MOVE, {startPosition: move.startPosition, endPosition: move.endPosition});
+        this.context.commit(ADD_PIECE, {from: move.startPosition, to: move.endPosition});
+        this.context.commit(REMOVE_PIECE_FROM, move.startPosition);
+    }
+
+    @Action({ rawError: true })
+    public selectDestination(endPosition: ICellPosition) {
+        this.move({startPosition: this.selectedPiecePosition, endPosition});
 
         // CLEAR BOARD
         this.context.commit(UNSELECT_ALL_PIECES);
@@ -207,7 +235,9 @@ export class BoardModule extends VuexModule {
 
     @Action({ rawError: true })
     public askAIToGuessNextMove(endPosition: ICellPosition) {
-        stockfishWorker.postMessage('position startpos');
+        console.log("moves", this.moves)
+        console.log(`position startpos moves ${this.moves}`)
+        stockfishWorker.postMessage(`position startpos moves ${this.moves}`);
         stockfishWorker.postMessage('go movetime 1000');
 
         const context = this.context;
@@ -235,6 +265,9 @@ export class BoardModule extends VuexModule {
 
     @Action({ rawError: true })
     public stockfishPlays(move: string) {
-        console.log('stockfish plays : ', move);
+        this.move(getMoveFromAN(move));
+
+        this.context.commit(INCREMENT_ROUND);
+        this.context.commit(TOGGLE_PLAYER);
     }
 }

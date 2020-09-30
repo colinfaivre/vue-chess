@@ -17,6 +17,11 @@ export  interface IPath {
 }
 
 export interface ICellPosition {
-    rowIndex: number,
     columnIndex: number,
+    rowIndex: number,
+}
+
+export interface IMove {
+    startPosition: ICellPosition,
+    endPosition: ICellPosition,
 }
