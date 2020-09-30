@@ -42,8 +42,8 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
-import {namespace} from 'vuex-class';
+import { Component, Vue } from "vue-property-decorator";
+import { namespace } from 'vuex-class';
 import { getModule } from 'vuex-module-decorators';
 import { BoardModule } from '@/store/modules';
 const boardModule = namespace('board');

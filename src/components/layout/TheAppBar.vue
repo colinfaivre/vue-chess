@@ -5,7 +5,11 @@
     flat
     dark
   >
-    <v-btn icon color="blue-grey">
+    <v-btn
+      @click="toggleLeftDrawer()"
+      icon
+      color="blue-grey"
+    >
       <v-icon>
         mdi-menu
       </v-icon>
@@ -13,7 +17,11 @@
 
     <v-spacer/>
 
-    <v-btn icon color="blue-grey">
+    <v-btn
+      @click="toggleRightDrawer()"
+      icon
+      color="blue-grey"
+    >
       <v-icon>
         mdi-dots-vertical
       </v-icon>
@@ -26,6 +34,21 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 
+import {namespace} from 'vuex-class';
+import { getModule } from 'vuex-module-decorators';
+import { LayoutModule } from '@/store/modules';
+const layoutModule = namespace('layout');
+
 @Component<AppBar>({})
-export default class AppBar extends Vue {};
+export default class AppBar extends Vue {
+  public toggleLeftDrawer() {
+    const layoutModule = getModule(LayoutModule, this.$store);
+    layoutModule.toggleLeftDrawer();
+  }
+
+  public toggleRightDrawer() {
+    const layoutModule = getModule(LayoutModule, this.$store);
+    layoutModule.toggleRightDrawer();
+  }
+};
 </script>

@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer
-      v-model="drawerLeftIsOpened"
+      :value="isOpened"
       app
       color="blue-grey darken-4"
       dark
@@ -36,14 +36,17 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import Component from 'vue-class-component';
+import { Component, Vue, Prop } from "vue-property-decorator";
 
 @Component<TheDrawerLeft>({
   components: {
   },
 })
 export default class TheDrawerLeft extends Vue {
-  public drawerLeftIsOpened: boolean = true;
+  @Prop({
+      type: Boolean,
+      required: true,
+  })
+  public isOpened!: boolean;
 }
 </script>

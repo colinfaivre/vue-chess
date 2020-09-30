@@ -64,7 +64,6 @@ export class BoardModule extends VuexModule {
     public moveEnd: string|null = null;
 
     get selectedPiecePosition() {
-        console.log()
         for (const column in this.board) {
             for (const row in this.board[column]) {
                 if (this.board[column][row].piece !== null && this.board[column][row].piece!.selected === true) {
