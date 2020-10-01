@@ -1,6 +1,6 @@
 <template>
     <v-navigation-drawer
-      :value="isOpened"
+      v-model="opened"
       right
       app
       color="blue-grey darken-4"
@@ -20,21 +20,20 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import {namespace} from 'vuex-class';
+import { namespace } from 'vuex-class';
 import { getModule } from 'vuex-module-decorators';
 import { BoardModule } from '@/store/modules';
 const boardModule = namespace('board');
+import { LayoutModule } from '@/store/modules';
+const layoutModule = namespace('layout');
 
 @Component<TheDrawerRight>({
   components: {
   },
 })
 export default class TheDrawerRight extends Vue {
-  @Prop({
-      type: Boolean,
-      required: true,
-  })
-  public isOpened!: boolean;
+  @layoutModule.State
+  private drawerRightIsOpened!: boolean;
 
   @boardModule.State
   private round!: number;
@@ -44,6 +43,15 @@ export default class TheDrawerRight extends Vue {
 
   get playerHasToPlay() {
     return this.hasToPlay === 'white' ? 'White to play' : 'Black to play';
+  }
+
+  get opened() {
+    return this.drawerRightIsOpened;
+  }
+
+  set opened(value: boolean) {
+    const layoutModule = getModule(LayoutModule, this.$store);
+    layoutModule.setDrawerRight(value);
   }
 }
 </script>

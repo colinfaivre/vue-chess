@@ -2,9 +2,9 @@
   <v-app>
     <the-app-bar/>
 
-    <the-drawer-left :isOpened="drawerLeftIsOpened"/>
+    <the-drawer-left/>
 
-    <the-drawer-right :isOpened="drawerRightIsOpened"/>
+    <the-drawer-right/>
 
     <v-main class="main">
       <board/>
@@ -16,10 +16,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import Board from './components/Board.vue';
-
-import {namespace} from 'vuex-class';
-import { LayoutModule } from '@/store/modules';
-const layoutModule = namespace('layout');
 
 import TheDrawerLeft from "@/components/layout/TheDrawerLeft.vue";
 import TheDrawerRight from "@/components/layout/TheDrawerRight.vue";
@@ -33,13 +29,7 @@ import TheAppBar from "@/components/layout/TheAppBar.vue";
     TheAppBar,
   },
 })
-export default class App extends Vue {
-  @layoutModule.State
-  private drawerLeftIsOpened!: boolean;
-
-  @layoutModule.State
-  private drawerRightIsOpened!: boolean;
-}
+export default class App extends Vue {}
 </script>
 
 <style scoped>
