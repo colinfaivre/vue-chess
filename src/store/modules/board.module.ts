@@ -59,7 +59,7 @@ export class BoardModule extends VuexModule {
     public hasToPlay: string = 'white';
     public selectedPiece: IPiece|null = null;
     public round: number = 1;
-    public moves: string = '';
+    public moves: string[] = [];
     public moveStart: string|null = null;
     public moveEnd: string|null = null;
 
@@ -74,6 +74,16 @@ export class BoardModule extends VuexModule {
                 }
             }
         }
+    }
+
+    get movesAsString() {
+        let movesString = '';
+
+        for (let i = 0; i < this.moves.length; i++) {
+            movesString += this.moves[i] + ' ';
+        }
+
+        return movesString;
     }
 
     @Mutation
@@ -132,7 +142,7 @@ export class BoardModule extends VuexModule {
         this.moveStart = getANCoords(move.startPosition);
         this.moveEnd = getANCoords(move.endPosition);
         if (this.moveStart && this.moveEnd) {
-            this.moves += `${this.moveStart + this.moveEnd} `;
+            this.moves.push(this.moveStart + this.moveEnd);
         }
     }
 
@@ -235,8 +245,8 @@ export class BoardModule extends VuexModule {
     @Action({ rawError: true })
     public askAIToGuessNextMove(endPosition: ICellPosition) {
         console.log("moves", this.moves)
-        console.log(`position startpos moves ${this.moves}`)
-        stockfishWorker.postMessage(`position startpos moves ${this.moves}`);
+        console.log(`position startpos moves ${this.movesAsString}`)
+        stockfishWorker.postMessage(`position startpos moves ${this.movesAsString}`);
         stockfishWorker.postMessage('go movetime 1000');
 
         const context = this.context;

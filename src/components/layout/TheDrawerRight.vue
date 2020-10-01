@@ -15,6 +15,15 @@
           {{playerHasToPlay}}
         </v-list-item>
       </v-list>
+
+      <div class="ml-4 white--text">
+        <div v-for="(move, index) in moves" :key="index">
+          <v-icon small :color="moveColor(index)">
+            mdi-brightness-1
+          </v-icon>
+          {{index + 1}}. {{move}}
+        </div>
+      </div>
     </v-navigation-drawer>
 </template>
 
@@ -41,6 +50,9 @@ export default class TheDrawerRight extends Vue {
   @boardModule.State
   private hasToPlay!: string;
 
+  @boardModule.State
+  private moves!: string[];
+
   get playerHasToPlay() {
     return this.hasToPlay === 'white' ? 'White to play' : 'Black to play';
   }
@@ -52,6 +64,10 @@ export default class TheDrawerRight extends Vue {
   set opened(value: boolean) {
     const layoutModule = getModule(LayoutModule, this.$store);
     layoutModule.setDrawerRight(value);
+  }
+
+  public moveColor(index: number) {
+    return index % 2 === 0 ? 'white' : 'black';
   }
 }
 </script>
