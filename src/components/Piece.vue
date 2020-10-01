@@ -1,14 +1,16 @@
 <template>
-  <div
-    class="piece-container"
-    :class="{'selected': selected}"
-    @click="selectOrigin(cell)"
-  >
-    <img
-      class="piece"
-      :src="require(`../assets/pieces/${type}_${color}.svg`)"
+  <transition name="slide" appear>
+    <div
+      class="piece-container"
+      :class="{'selected': selected}"
+      @click="selectOrigin(cell)"
     >
-  </div>
+      <img
+        class="piece"
+        :src="require(`../assets/pieces/${type}_${color}.svg`)"
+      >
+    </div>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -73,5 +75,13 @@ export default class Piece extends Vue {
       cursor: pointer;
     }
   }
+}
+
+/* PIECES TRANSITIONS */
+.slide-enter {
+  opacity: 0;
+}
+.slide-enter-active {
+  transition: all .4s ease;
 }
 </style>

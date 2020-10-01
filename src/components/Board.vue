@@ -1,12 +1,13 @@
 <template>
   <v-container class="fill-height d-flex flex-column justify-center board-background">
-    <div class="board elevation-4">
+    <div name="slide" class="board elevation-4">
       <div
         v-if="hasToPlay === 'black'"
         class="has-to-play has-to-play--black"
       />
 
       <div
+
         class="board-row"
         v-for="(column, columnIndex) in board"
         :key="columnIndex"
@@ -17,6 +18,7 @@
           class="cell"
           :class="`cell--${cell.color}`"
         >
+          
           <piece
             v-if="cell.piece"
             :color="cell.piece.color"
@@ -137,5 +139,4 @@ export default class Board extends Vue {
     }
   }
 }
-
 </style>
