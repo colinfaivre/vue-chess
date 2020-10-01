@@ -8,6 +8,10 @@
     >
       <v-list dense>
         <v-list-item link>
+          Computer level : {{stockfishLevel}}
+        </v-list-item>
+
+        <v-list-item link>
           Round {{round}}
         </v-list-item>
 
@@ -43,6 +47,9 @@ const layoutModule = namespace('layout');
 export default class TheDrawerRight extends Vue {
   @layoutModule.State
   private drawerRightIsOpened!: boolean;
+
+  @boardModule.State
+  private stockfishLevel!: number;
 
   @boardModule.State
   private round!: number;

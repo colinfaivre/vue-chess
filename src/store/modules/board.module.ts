@@ -45,6 +45,7 @@ import boardSerializer from '@/data/boardSerializer';
     name: 'board',
 })
 export class BoardModule extends VuexModule {
+    public stockfishLevel = 5;
     public initialBoardSnapshot = [
         'rnbqkbnr',
         'pppppppp',
@@ -54,7 +55,7 @@ export class BoardModule extends VuexModule {
         '........',
         'PPPPPPPP',
         'RNBQKBNR',
-    ]
+    ];
     public board: ICell[][] = boardSnapshotParser(this.initialBoardSnapshot);
     public hasToPlay: string = 'white';
     public selectedPiece: IPiece|null = null;
@@ -247,7 +248,7 @@ export class BoardModule extends VuexModule {
         console.log("moves", this.moves)
         console.log(`position startpos moves ${this.movesAsString}`)
         stockfishWorker.postMessage(`position startpos moves ${this.movesAsString}`);
-        stockfishWorker.postMessage('go movetime 1000');
+        stockfishWorker.postMessage(`go movetime ${this.stockfishLevel * 1000}`);
 
         const context = this.context;
 
