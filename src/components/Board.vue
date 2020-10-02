@@ -47,8 +47,12 @@
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from 'vuex-class';
 import { getModule } from 'vuex-module-decorators';
-import { BoardModule } from '@/store/modules';
+import {
+  BoardModule,
+  StockfishModule,
+} from '@/store/modules';
 const boardModule = namespace('board');
+const stockfishModule = namespace('stockfish');
 
 import {
     ICell,
@@ -75,8 +79,8 @@ export default class Board extends Vue {
   }
 
   created() {
-    const boardModule = getModule(BoardModule, this.$store);
-    boardModule.initStockfish();
+    const stockfishModule = getModule(StockfishModule, this.$store);
+    stockfishModule.init();
   }
 }
 </script>

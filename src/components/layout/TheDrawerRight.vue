@@ -35,10 +35,14 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { namespace } from 'vuex-class';
 import { getModule } from 'vuex-module-decorators';
-import { BoardModule } from '@/store/modules';
+import {
+  BoardModule,
+  StockfishModule,
+  LayoutModule,
+} from '@/store/modules';
 const boardModule = namespace('board');
-import { LayoutModule } from '@/store/modules';
 const layoutModule = namespace('layout');
+const stockfishModule = namespace('stockfish');
 
 @Component<TheDrawerRight>({
   components: {
@@ -48,7 +52,7 @@ export default class TheDrawerRight extends Vue {
   @layoutModule.State
   private drawerRightIsOpened!: boolean;
 
-  @boardModule.State
+  @stockfishModule.State
   private computerLevel!: number;
 
   @boardModule.State

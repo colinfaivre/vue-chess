@@ -64,9 +64,11 @@ import { getModule } from 'vuex-module-decorators';
 import {
   LayoutModule,
   BoardModule,
+  StockfishModule,
 } from '@/store/modules';
 const layoutModule = namespace('layout');
 const boardModule = namespace('board');
+const stockfishModule = namespace('stockfish');
 
 @Component<TheDrawerLeft>({
   components: {
@@ -88,7 +90,7 @@ export default class TheDrawerLeft extends Vue {
     },
   ]
 
-  @boardModule.State
+  @stockfishModule.State
   private computerLevel!: number;
 
   get level() {
@@ -96,8 +98,8 @@ export default class TheDrawerLeft extends Vue {
   }
 
   set level(value: number) {
-    const boardModule = getModule(BoardModule, this.$store);
-    boardModule.setComputerLevel(value);
+    const stockfishModule = getModule(StockfishModule, this.$store);
+    stockfishModule.setComputerLevel(value);
   }
 
   public colors = [
