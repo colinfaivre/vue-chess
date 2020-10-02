@@ -8,3 +8,6 @@ export const ADD_PIECE = '_addPiece';
 export const TOGGLE_PLAYER = '_togglePlayer';
 export const INCREMENT_ROUND = '_incrementRound';
 export const ADD_MOVE = '_addMove';
+export const SET_COMPUTER_LEVEL = '_setComputerLevel';
+export const SET_PLAYER_COLOR = '_setPlayerColor';
+export const RESET_GAME = '_resetGame';

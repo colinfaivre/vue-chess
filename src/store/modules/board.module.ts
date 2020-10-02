@@ -25,6 +25,9 @@ import {
     TOGGLE_PLAYER,
     INCREMENT_ROUND,
     ADD_MOVE,
+    SET_COMPUTER_LEVEL,
+    SET_PLAYER_COLOR,
+    RESET_GAME,
 } from '@/types/store/mutations/board.mutations';
 
 import {
@@ -45,7 +48,8 @@ import boardSerializer from '@/data/boardSerializer';
     name: 'board',
 })
 export class BoardModule extends VuexModule {
-    public stockfishLevel = 5;
+    public computerLevel: number = 1;
+    public playerColor: string = 'white';
     public initialBoardSnapshot = [
         'rnbqkbnr',
         'pppppppp',
@@ -139,12 +143,28 @@ export class BoardModule extends VuexModule {
     }
 
     @Mutation
+    private [SET_COMPUTER_LEVEL](level: number) {
+        this.computerLevel = level;
+    }
+
+    @Mutation
+    private [SET_PLAYER_COLOR](color: string) {
+        this.playerColor = color;
+    }
+
+    @Mutation
     private [ADD_MOVE](move: IMove) {
         this.moveStart = getANCoords(move.startPosition);
         this.moveEnd = getANCoords(move.endPosition);
         if (this.moveStart && this.moveEnd) {
             this.moves.push(this.moveStart + this.moveEnd);
         }
+    }
+
+    @Mutation
+    private [RESET_GAME]() {
+        this.board = boardSnapshotParser(this.initialBoardSnapshot);
+        this.moves = [];
     }
 
     @Mutation
@@ -248,7 +268,7 @@ export class BoardModule extends VuexModule {
         console.log("moves", this.moves)
         console.log(`position startpos moves ${this.movesAsString}`)
         stockfishWorker.postMessage(`position startpos moves ${this.movesAsString}`);
-        stockfishWorker.postMessage(`go movetime ${this.stockfishLevel * 1000}`);
+        stockfishWorker.postMessage(`go movetime ${this.computerLevel * 1000}`);
 
         const context = this.context;
 
@@ -266,10 +286,6 @@ export class BoardModule extends VuexModule {
 
         stockfishWorker.onmessage = function(e) {
             console.log(e.data);
-            if (e.data.split(' ')[0] === 'bestmove') {
-                console.log(e.data.split(' ')[1]);
-                
-            }
         }
     }
 
@@ -279,5 +295,21 @@ export class BoardModule extends VuexModule {
 
         this.context.commit(INCREMENT_ROUND);
         this.context.commit(TOGGLE_PLAYER);
+    }
+
+    @Action({ rawError: true })
+    public setComputerLevel(level: number) {
+        this.context.commit(SET_COMPUTER_LEVEL, level);
+    }
+
+    @Action({ rawError: true })
+    public setPlayerColor(color: string) {
+        this.context.commit(SET_PLAYER_COLOR, color);
+    }
+
+    @Action({ rawError: true })
+    public startNewGame() {
+        this.context.dispatch('initStockfish');
+        this.context.commit(RESET_GAME);
     }
 }

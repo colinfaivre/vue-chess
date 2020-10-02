@@ -8,7 +8,7 @@
     >
       <v-list dense>
         <v-list-item link>
-          Computer level : {{stockfishLevel}}
+          Computer level : {{computerLevel}}
         </v-list-item>
 
         <v-list-item link>
@@ -49,7 +49,7 @@ export default class TheDrawerRight extends Vue {
   private drawerRightIsOpened!: boolean;
 
   @boardModule.State
-  private stockfishLevel!: number;
+  private computerLevel!: number;
 
   @boardModule.State
   private round!: number;
