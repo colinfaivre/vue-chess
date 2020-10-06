@@ -76,6 +76,7 @@ function boardFeeder(anCoordsBoard: string[][]): ICell[][] {
                 piece: rowValue === '.' ? null : getPiece(rowValue),
                 color: getCellColor(columnIndex, rowIndex),
                 possibleDestination: false,
+                possibleKill: false,
             };
             column.push(cell);
         };

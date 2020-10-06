@@ -18,6 +18,7 @@ import {
     UNSELECT_ALL_PIECES,
     SHOW_POSSIBLE_MOVES,
     HIDE_POSSIBLE_DESTINATIONS,
+    HIDE_POSSIBLE_KILLS,
     REMOVE_PIECE_FROM,
     ADD_PIECE,
     TOGGLE_PLAYER,
@@ -108,6 +109,15 @@ export class BoardModule extends VuexModule {
     }
 
     @Mutation
+    private [HIDE_POSSIBLE_KILLS]() {
+        for (const row in this.board) {
+            for (const column in this.board[row]) {
+                this.board[row][column].possibleKill = false;
+            }
+        }
+    }
+
+    @Mutation
     private [SELECT_PIECE](cellPosition: ICellPosition) {
         this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece!.selected = true;
         this.selectedPiece = this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece;
@@ -156,18 +166,29 @@ export class BoardModule extends VuexModule {
     private [RESET_GAME]() {
         this.board = boardSnapshotParser(this.initialBoardSnapshot);
         this.moves = [];
+        this.round = 1;
     }
 
     @Mutation
     private [SHOW_POSSIBLE_MOVES](cellPosition: ICellPosition) {
-        const validateMove = (columnMove: number, rowMove: number): void => {
+        const validateMove = (columnMove: number, rowMove: number): string|object|undefined => {
+            // Check if move is not out of board
             const destinationCellIsInRow = cellPosition.rowIndex + rowMove >= 0 && cellPosition.rowIndex + rowMove <= 7;
             const destinationCellIsInColumn = cellPosition.columnIndex + columnMove >= 0 && cellPosition.columnIndex + columnMove <= 7;
+            const destinationIsOnBoard = destinationCellIsInColumn && destinationCellIsInRow;
 
-            if (destinationCellIsInRow && destinationCellIsInColumn) {
+            if (destinationIsOnBoard) {
                 const destinationCellIsFree = this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].piece === null;
                 if (destinationCellIsFree) {
                     this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].possibleDestination = true;
+                } else {
+                    if (this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].piece?.color !== this.playerColor) {
+                        this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].possibleKill = true;
+
+                        return 'stop';
+                    }
+                    // Stop seaching for new destinations as the previous was taken by a black or white piece
+                    return 'stop';
                 }
             }
         }
@@ -175,43 +196,61 @@ export class BoardModule extends VuexModule {
         if (this.selectedPiece) {
             switch (this.selectedPiece.type) {
                 case 'rook':
-                    console.log('rook');
-                    for(const rookMove of ROOK_MOVES) {
-                        validateMove(...rookMove);
+                    for(const rookMoveSerie of ROOK_MOVES) {
+                        for (const rookMove of rookMoveSerie) {
+                            if(validateMove(...rookMove) === 'stop') {
+                                break;
+                            }
+                        }
                     }
                     break;
                 case 'knight':
-                    console.log('knight', cellPosition);
-                    for(const knightMove of KNIGHT_MOVES) {
-                        validateMove(...knightMove);
+                    for(const knightMoveSerie of KNIGHT_MOVES) {
+                        for(const knightMove of knightMoveSerie) {
+                            if(validateMove(...knightMove) === 'stop') {
+                                break;
+                            }
+                        }
                     }
                     break;
                 case 'bishop':
-                    console.log('bishop', cellPosition);
-                    for(const bishopMove of BISHOP_MOVES) {
-                        validateMove(...bishopMove);
+                    for(const bishopMoveSerie of BISHOP_MOVES) {
+                        for(const bishopMove of bishopMoveSerie) {
+                            if(validateMove(...bishopMove) === 'stop') {
+                                break;
+                            }
+                        }
                     }
                     break;
                 case 'queen':
-                    console.log('queen', cellPosition);
-                    for(const queenMove of QUEEN_MOVES) {
-                        validateMove(...queenMove);
+                    for(const queenMoveSerie of QUEEN_MOVES) {
+                        for(const queenMove of queenMoveSerie) {
+                            if(validateMove(...queenMove) === 'stop') {
+                                break;
+                            }
+                        }
                     }
                     break;
                 case 'king':
-                    console.log('king', cellPosition);
-                    for(const kingMove of KING_MOVES) {
-                        validateMove(...kingMove);
+                    for(const kingMoveSerie of KING_MOVES) {
+                        for(const kingMove of kingMoveSerie) {
+                            if(validateMove(...kingMove) === 'stop') {
+                                break;
+                            }
+                        }
                     }
                     break;
                 case 'pawn':
-                    console.log('pawn', cellPosition);
                     if (this.hasToPlay === 'white') {
                         this.board[cellPosition.columnIndex][cellPosition.rowIndex + 1].possibleDestination = true;
-                        this.board[cellPosition.columnIndex][cellPosition.rowIndex + 2].possibleDestination = true;
+                        if (cellPosition.rowIndex === 1) {
+                            this.board[cellPosition.columnIndex][cellPosition.rowIndex + 2].possibleDestination = true;
+                        }
                     } else {
                         this.board[cellPosition.columnIndex][cellPosition.rowIndex - 1].possibleDestination = true;
-                        this.board[cellPosition.columnIndex][cellPosition.rowIndex - 2].possibleDestination = true;
+                        if (cellPosition.rowIndex === 6) {
+                            this.board[cellPosition.columnIndex][cellPosition.rowIndex - 2].possibleDestination = true;
+                        }
                     }
                     break;
             }
@@ -222,6 +261,7 @@ export class BoardModule extends VuexModule {
     public selectOrigin(from: ICellPosition) {
         this.context.commit(UNSELECT_ALL_PIECES);
         this.context.commit(HIDE_POSSIBLE_DESTINATIONS);
+        this.context.commit(HIDE_POSSIBLE_KILLS);
 
         if (this.hasToPlay === this.board[from.columnIndex][from.rowIndex].piece!.color) {
             this.context.commit(SELECT_PIECE, from);
@@ -247,6 +287,7 @@ export class BoardModule extends VuexModule {
         // CLEAR BOARD
         this.context.commit(UNSELECT_ALL_PIECES);
         this.context.commit(HIDE_POSSIBLE_DESTINATIONS);
+        this.context.commit(HIDE_POSSIBLE_KILLS);
 
         this.context.commit(INCREMENT_ROUND);
         this.context.commit(TOGGLE_PLAYER);

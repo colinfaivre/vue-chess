@@ -32,6 +32,12 @@
             class="possible-destination"
             @click="selectDestination({columnIndex, rowIndex})"
           />
+
+          <div
+            v-if="cell.possibleKill"
+            class="possible-kill"
+            @click="selectDestination({columnIndex, rowIndex})"
+          />
         </div>
       </div>
 
@@ -123,6 +129,7 @@ export default class Board extends Vue {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 
   &--white {
     background-color: #e2d7d7;
@@ -131,15 +138,31 @@ export default class Board extends Vue {
     background-color:#526670;
   }
 
-  .possible-destination {
+  .possible-destination, .possible-kill {
     width: 35%;
     height: 35%;
     border-radius: 50%;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .possible-destination {
     background-color: #65d6a7;
 
     &:hover {
       background-color: #4ea782;
-      cursor: pointer;
+    }
+  }
+
+  .possible-kill {
+    position: absolute;
+    background-color: #d34444;
+    opacity: .8;
+
+    &:hover {
+      background-color: #b32f2f;
     }
   }
 }
