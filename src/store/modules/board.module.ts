@@ -242,13 +242,28 @@ export class BoardModule extends VuexModule {
                     break;
                 case 'pawn':
                     if (this.hasToPlay === 'white') {
-                        this.board[cellPosition.columnIndex][cellPosition.rowIndex + 1].possibleDestination = true;
-                        if (cellPosition.rowIndex === 1) {
+                        // White pawn moves by one cell forward
+                        if (this.board[cellPosition.columnIndex][cellPosition.rowIndex + 1].piece === null) {
+                            this.board[cellPosition.columnIndex][cellPosition.rowIndex + 1].possibleDestination = true;
+                        }
+                        // White pawn moves by two cells forward
+                        if (cellPosition.rowIndex === 1 && this.board[cellPosition.columnIndex][cellPosition.rowIndex + 2].piece === null) {
                             this.board[cellPosition.columnIndex][cellPosition.rowIndex + 2].possibleDestination = true;
                         }
+                        // White pawn takes opponent on right/forward diagonal
+                        if (this.board[cellPosition.columnIndex + 1][cellPosition.rowIndex + 1].piece !== null && this.board[cellPosition.columnIndex + 1][cellPosition.rowIndex + 1].piece?.color !== this.hasToPlay) {
+                            this.board[cellPosition.columnIndex + 1][cellPosition.rowIndex + 1].possibleKill = true;
+                        }
+                        // White pawn takes opponent on left/forward diagonal
+                        if (this.board[cellPosition.columnIndex - 1][cellPosition.rowIndex + 1].piece !== null && this.board[cellPosition.columnIndex - 1][cellPosition.rowIndex + 1].piece?.color !== this.hasToPlay) {
+                            this.board[cellPosition.columnIndex - 1][cellPosition.rowIndex + 1].possibleKill = true;
+                        }
                     } else {
-                        this.board[cellPosition.columnIndex][cellPosition.rowIndex - 1].possibleDestination = true;
-                        if (cellPosition.rowIndex === 6) {
+                        if (this.board[cellPosition.columnIndex][cellPosition.rowIndex - 1].piece === null) {
+                            this.board[cellPosition.columnIndex][cellPosition.rowIndex - 1].possibleDestination = true;
+                        }
+
+                        if (cellPosition.rowIndex === 6 && this.board[cellPosition.columnIndex][cellPosition.rowIndex - 2].piece === null) {
                             this.board[cellPosition.columnIndex][cellPosition.rowIndex - 2].possibleDestination = true;
                         }
                     }
