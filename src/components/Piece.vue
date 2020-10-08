@@ -8,7 +8,7 @@
       <img
         class="piece"
         :src="require(`../assets/pieces/${type}_${color}.svg`)"
-      >
+      />
     </div>
   </transition>
 </template>
@@ -37,13 +37,13 @@ export default class Piece extends Vue {
 
   @Prop({
       type: Boolean,
-      required: true,
+      required: false,
   })
   public selected!: boolean;
 
   @Prop({
       type: Object,
-      required: true,
+      required: false,
   })
   public cell!: object;
 

@@ -64,6 +64,8 @@ export class BoardModule extends VuexModule {
     public moves: string[] = [];
     public moveStart: string|null = null;
     public moveEnd: string|null = null;
+    public playerCapturedPieces: IPiece[] = [];
+    public computerCapturedPieces: IPiece[] = [];
 
     get selectedPiecePosition() {
         for (const column in this.board) {
@@ -126,6 +128,17 @@ export class BoardModule extends VuexModule {
 
     @Mutation
     private [ADD_PIECE](path: IPath) {
+        if (this.board[path.to.columnIndex][path.to.rowIndex].piece !== null) {
+            if (this.hasToPlay === 'white') {
+                this.playerCapturedPieces.push(this.board[path.to.columnIndex][path.to.rowIndex].piece!);
+                console.log('playerCapturedPieces', this.playerCapturedPieces);
+            }
+
+            if (this.hasToPlay === 'black') {
+                this.computerCapturedPieces.push(this.board[path.to.columnIndex][path.to.rowIndex].piece!);
+                console.log('computerCapturedPieces', this.computerCapturedPieces);
+            }
+        }
         this.board[path.to.columnIndex][path.to.rowIndex].piece = this.board[path.from.columnIndex][path.from.rowIndex].piece;
     }
 

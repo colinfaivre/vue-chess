@@ -1,13 +1,15 @@
 <template>
   <v-container class="fill-height d-flex flex-column justify-center board-background">
     <div name="slide" class="board elevation-4">
+
+      <captured-pieces-area side="computer"/>
+      
       <div
         v-if="hasToPlay === 'black'"
         class="has-to-play has-to-play--black"
       />
 
       <div
-
         class="board-row"
         v-for="(column, columnIndex) in board"
         :key="columnIndex"
@@ -45,6 +47,9 @@
         v-if="hasToPlay === 'white'"
         class="has-to-play has-to-play--white"
       />
+
+      <captured-pieces-area side="player"/>
+
     </div>
   </v-container>
 </template>
@@ -63,13 +68,16 @@ const stockfishModule = namespace('stockfish');
 import {
     ICell,
     ICellPosition,
+    IPiece,
 } from '@/types';
 
 import Piece from "@/components/Piece.vue";
+import CapturedPiecesArea from "@/components/CapturedPiecesArea.vue";
 
 @Component<Board>({
   components: {
     Piece,
+    CapturedPiecesArea,
   },
 })
 export default class Board extends Vue {
@@ -99,6 +107,7 @@ export default class Board extends Vue {
   display: flex;
   position: relative;
 }
+
 .has-to-play {
   position: absolute;
   height: 5px;
@@ -117,6 +126,7 @@ export default class Board extends Vue {
     bottom: -5px;
   }
 }
+
 .board-row {
   display: flex;
   flex-direction: column-reverse;
