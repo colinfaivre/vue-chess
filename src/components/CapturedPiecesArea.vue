@@ -3,7 +3,7 @@
       class="captured-pieces d-flex"
       :class="`captured-pieces--${side}`"
     >
-      <div v-for="capturedPiece in capturedPieces" :key="capturedPiece">
+      <div v-for="(capturedPiece, index) in capturedPieces" :key="index">
         <piece :color="capturedPiece.color" :type="capturedPiece.type"/>
       </div>
     </div>

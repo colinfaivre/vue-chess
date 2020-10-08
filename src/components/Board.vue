@@ -1,57 +1,39 @@
 <template>
-  <v-container class="fill-height d-flex flex-column justify-center board-background">
-    <div name="slide" class="board elevation-4">
-
-      <captured-pieces-area side="computer"/>
-      
+  <div class="board">
+    <div
+      class="board-row"
+      v-for="(column, columnIndex) in board"
+      :key="columnIndex"
+    >
       <div
-        v-if="hasToPlay === 'black'"
-        class="has-to-play has-to-play--black"
-      />
-
-      <div
-        class="board-row"
-        v-for="(column, columnIndex) in board"
-        :key="columnIndex"
+        v-for="(cell, rowIndex) in column"
+        :key="rowIndex"
+        class="cell"
+        :class="`cell--${cell.color}`"
       >
+        
+        <piece
+          v-if="cell.piece"
+          :color="cell.piece.color"
+          :type="cell.piece.type"
+          :selected="cell.piece.selected"
+          :cell="{columnIndex, rowIndex}"
+        />
+
         <div
-          v-for="(cell, rowIndex) in column"
-          :key="rowIndex"
-          class="cell"
-          :class="`cell--${cell.color}`"
-        >
-          
-          <piece
-            v-if="cell.piece"
-            :color="cell.piece.color"
-            :type="cell.piece.type"
-            :selected="cell.piece.selected"
-            :cell="{columnIndex, rowIndex}"
-          />
+          v-if="cell.possibleDestination"
+          class="possible-destination"
+          @click="selectDestination({columnIndex, rowIndex})"
+        />
 
-          <div
-            v-if="cell.possibleDestination"
-            class="possible-destination"
-            @click="selectDestination({columnIndex, rowIndex})"
-          />
-
-          <div
-            v-if="cell.possibleKill"
-            class="possible-kill"
-            @click="selectDestination({columnIndex, rowIndex})"
-          />
-        </div>
+        <div
+          v-if="cell.possibleKill"
+          class="possible-kill"
+          @click="selectDestination({columnIndex, rowIndex})"
+        />
       </div>
-
-      <div
-        v-if="hasToPlay === 'white'"
-        class="has-to-play has-to-play--white"
-      />
-
-      <captured-pieces-area side="player"/>
-
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script lang="ts">
@@ -74,18 +56,15 @@ import {
 import Piece from "@/components/Piece.vue";
 import CapturedPiecesArea from "@/components/CapturedPiecesArea.vue";
 
-@Component<Board>({
+@Component<BoardContainer>({
   components: {
     Piece,
     CapturedPiecesArea,
   },
 })
-export default class Board extends Vue {
+export default class BoardContainer extends Vue {
   @boardModule.State
   private board!: ICell[][];
-
-  @boardModule.State
-  private hasToPlay!: string;
 
   public selectDestination(cellPosition: ICellPosition) {
     const boardModule = getModule(BoardModule, this.$store);
@@ -101,30 +80,8 @@ export default class Board extends Vue {
 
 <style scoped lang="scss">
 .board {
-  height: 400px;
-  width: 400px;
-  background-color: #d1d1d1;
   display: flex;
   position: relative;
-}
-
-.has-to-play {
-  position: absolute;
-  height: 5px;
-  border-radius: 2.5px;
-  opacity: .6;
-  width: 100%;
-  background-color: #65d6a7;
-  filter: blur(1px);
-  z-index: 0;
-
-  &--black {
-    top: -5px;
-  }
-
-  &--white {
-    bottom: -5px;
-  }
 }
 
 .board-row {
