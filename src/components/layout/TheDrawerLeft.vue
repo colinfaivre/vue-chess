@@ -37,6 +37,7 @@
 
         <v-list-item
           @click="loginDialogIsOpened = true"
+          v-if="!loggedIn"
           link
         >
           <v-list-item-action>
@@ -54,6 +55,7 @@
 
          <v-list-item
           @click="logout"
+          v-if="loggedIn"
           link
         >
           <v-list-item-action>
@@ -71,6 +73,7 @@
 
         <v-list-item
           @click="myAccountDialogIsOpened = true"
+          v-if="loggedIn"
           link
         >
           <v-list-item-action>
@@ -156,8 +159,13 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 
 import { namespace } from 'vuex-class';
 import { getModule } from 'vuex-module-decorators';
-import { LayoutModule } from '@/store/modules';
+
+import {
+  LayoutModule,
+  UserModule,
+} from '@/store/modules';
 const layoutModule = namespace('layout');
+const userModule = namespace('user');
 
 import NewGameForm from '@/components/forms/NewGameForm.vue';
 import SignupForm from '@/components/forms/SignupForm.vue';
@@ -181,6 +189,9 @@ export default class TheDrawerLeft extends Vue {
   @layoutModule.State
   private drawerLeftIsOpened!: boolean;
 
+  @userModule.Getter
+  private loggedIn!: boolean;
+
   get opened() {
     return this.drawerLeftIsOpened;
   }
@@ -191,7 +202,9 @@ export default class TheDrawerLeft extends Vue {
   }
 
   public logout() {
-
-  }
+    const userModule = getModule(UserModule, this.$store);
+    
+    userModule.logout()
+  } 
 }
 </script>

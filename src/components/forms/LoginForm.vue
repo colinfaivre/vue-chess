@@ -32,7 +32,7 @@
       <v-spacer/>
       
       <v-btn
-        @click="cancel()"
+        @click="close()"
         color="blue-grey darken-3"
         text
       >
@@ -40,6 +40,7 @@
       </v-btn>
 
       <v-btn
+        @click='login()'
         color="blue-grey darken-3"
         class="white--text"
       >
@@ -51,6 +52,16 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
+import { getModule } from 'vuex-module-decorators';
+
+import {
+  UserModule,
+  SnackbarModule,
+} from '@/store/modules';
+
+import {
+  ILoginUserRequestParams,
+} from '@/types/store/user';
 
 @Component<LoginForm>({
   components: {
@@ -66,8 +77,26 @@ export default class LoginForm extends Vue {
     min: (v: string) => v.length >= 8 || 'Min 8 characters',
   }
 
-  public cancel(): void {
+  public close(): void {
     this.$emit('close');
+  }
+
+  public login() {
+    const userModule = getModule(UserModule, this.$store);
+    const snackbarModule = getModule(SnackbarModule, this.$store);
+    const loginUserParams: ILoginUserRequestParams = {
+      email: this.email,
+      password: this.password,
+    };
+
+    userModule
+      .login(loginUserParams)
+      .then(() => {
+        this.close();
+      })
+      .catch(error => {
+        snackbarModule.displayError('Adresse email ou mot de passe incorrect')
+      })
   }
 }
 </script>

@@ -32,7 +32,7 @@
       <v-spacer/>
       
       <v-btn
-        @click="cancel()"
+        @click="close()"
         color="blue-grey darken-3"
         text
       >
@@ -40,6 +40,7 @@
       </v-btn>
 
       <v-btn
+        @click="signup()"
         color="blue-grey darken-3"
         class="white--text"
       >
@@ -51,6 +52,15 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
+import { getModule } from 'vuex-module-decorators';
+
+import {
+  UserModule,
+} from '@/store/modules';
+
+import {
+  ISignupUserRequestParams,
+} from '@/types/store/user';
 
 @Component<SignupForm>({
   components: {
@@ -66,8 +76,22 @@ export default class SignupForm extends Vue {
     min: (v: string) => v.length >= 8 || 'Min 8 characters',
   }
 
-  public cancel(): void {
+  public close(): void {
     this.$emit('close');
+  }
+
+  public signup() {
+    const userModule = getModule(UserModule, this.$store);
+    const signupUserParams: ISignupUserRequestParams = {
+      email: this.email,
+      password: this.password,
+    };
+
+    userModule
+      .signup(signupUserParams)
+      .then(() => {
+        this.close();
+      });
   }
 }
 </script>
