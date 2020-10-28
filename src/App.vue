@@ -9,6 +9,8 @@
     <v-main class="main">
       <board-container/>
     </v-main>
+
+    <the-footer/>
   </v-app>
 </template>
 
@@ -20,6 +22,7 @@ import BoardContainer from './components/BoardContainer.vue';
 import TheDrawerLeft from "@/components/layout/TheDrawerLeft.vue";
 import TheDrawerRight from "@/components/layout/TheDrawerRight.vue";
 import TheAppBar from "@/components/layout/TheAppBar.vue";
+import TheFooter from '@/components/layout/TheFooter.vue';
 
 @Component<App>({
   components: {
@@ -27,6 +30,7 @@ import TheAppBar from "@/components/layout/TheAppBar.vue";
     TheDrawerLeft,
     TheDrawerRight,
     TheAppBar,
+    TheFooter,
   },
 })
 export default class App extends Vue {}
