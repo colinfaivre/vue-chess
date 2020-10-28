@@ -70,11 +70,11 @@ const layoutModule = namespace('layout');
 const boardModule = namespace('board');
 const stockfishModule = namespace('stockfish');
 
-@Component<TheDrawerLeft>({
+@Component<NewGameForm>({
   components: {
   },
 })
-export default class TheDrawerLeft extends Vue {
+export default class NewGameForm extends Vue {
   public levels = [
     {
       name: 'Easy',

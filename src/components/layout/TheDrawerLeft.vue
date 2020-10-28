@@ -16,6 +16,78 @@
             </h3>
         </v-list-item>
 
+        <v-divider/>
+
+        <v-list-item
+          @click="signupDialogIsOpened = true"
+          link
+        >
+          <v-list-item-action>
+            <v-icon>
+              mdi-login
+            </v-icon>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <v-list-item-title>
+              Sign up
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item
+          @click="loginDialogIsOpened = true"
+          link
+        >
+          <v-list-item-action>
+            <v-icon>
+              mdi-account
+            </v-icon>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <v-list-item-title>
+              Log in
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+         <v-list-item
+          @click="logout"
+          link
+        >
+          <v-list-item-action>
+            <v-icon>
+              mdi-logout
+            </v-icon>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <v-list-item-title>
+              Log out
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item
+          @click="myAccountDialogIsOpened = true"
+          link
+        >
+          <v-list-item-action>
+            <v-icon>
+              mdi-card-account-details
+            </v-icon>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <v-list-item-title>
+              My account
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-divider/>
+
         <v-list-item
           @click="newGameDialogIsOpened = true"
           link
@@ -49,6 +121,27 @@
       </v-list>
 
       <v-dialog
+        v-model="signupDialogIsOpened"
+        max-width="500"
+      >
+        <signup-form @close="signupDialogIsOpened = false"/>
+      </v-dialog>
+
+      <v-dialog
+        v-model="loginDialogIsOpened"
+        max-width="500"
+      >
+        <login-form @close="loginDialogIsOpened = false"/>
+      </v-dialog>
+
+      <v-dialog
+        v-model="myAccountDialogIsOpened"
+        max-width="500"
+      >
+        <my-account-form @close="myAccountDialogIsOpened = false"/>
+      </v-dialog>
+
+      <v-dialog
         v-model="newGameDialogIsOpened"
         max-width="500"
       >
@@ -67,14 +160,23 @@ import { LayoutModule } from '@/store/modules';
 const layoutModule = namespace('layout');
 
 import NewGameForm from '@/components/forms/NewGameForm.vue';
+import SignupForm from '@/components/forms/SignupForm.vue';
+import LoginForm from '@/components/forms/LoginForm.vue';
+import MyAccountForm from '@/components/forms/MyAccountForm.vue';
 
 @Component<TheDrawerLeft>({
   components: {
     NewGameForm,
+    SignupForm,
+    LoginForm,
+    MyAccountForm,
   },
 })
 export default class TheDrawerLeft extends Vue {
   public newGameDialogIsOpened: boolean = false;
+  public signupDialogIsOpened: boolean = false;
+  public loginDialogIsOpened: boolean = false;
+  public myAccountDialogIsOpened: boolean = false;
 
   @layoutModule.State
   private drawerLeftIsOpened!: boolean;
@@ -86,6 +188,10 @@ export default class TheDrawerLeft extends Vue {
   set opened(value: boolean) {
     const layoutModule = getModule(LayoutModule, this.$store);
     layoutModule.setDrawerLeft(value);
+  }
+
+  public logout() {
+
   }
 }
 </script>
