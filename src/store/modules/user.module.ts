@@ -5,10 +5,12 @@ import {
     ISignupUserRequestParams,
     ISignupUserResponse,
     ILoginUserRequestParams,
+    IUser,
 } from '@/types';
 
 import {
     SET_USER,
+    SET_USERS,
     CLEAR_USER_DATA,
 } from '@/types/store/mutations/user.mutations';
 
@@ -17,7 +19,8 @@ import {
     name: 'user',
 })
 export class UserModule extends VuexModule {
-    public user: object | null = null;
+    public user: IUser | null = null;
+    public users: IUser[] = [];
 
     get loggedIn() {
         return !!this.user;
@@ -29,6 +32,15 @@ export class UserModule extends VuexModule {
         this.user = userData;
         localStorage.setItem('user', JSON.stringify(userData));
         axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`;
+    }
+
+    @Mutation
+    private [SET_USERS](userList: IUser[]) {
+        // Filter out the authenticated used from the list of users
+        userList = userList.filter(user => user.email !== this.user?.email);
+
+        this.users = userList;
+        localStorage.setItem('users', JSON.stringify(userList));
     }
 
     @Mutation
@@ -59,5 +71,14 @@ export class UserModule extends VuexModule {
     @Action({ rawError: true })
     public logout() {
         this.context.commit(CLEAR_USER_DATA);
+    }
+
+    @Action({ rawError: true })
+    public getAllUsers() {
+        return axios
+            .get('//localhost:3000/api/user/all')
+            .then(({data}) => {
+                this.context.commit(SET_USERS, data.data);
+            });
     }
 }

@@ -20,6 +20,7 @@
 
         <v-list-item
           @click="signupDialogIsOpened = true"
+          v-if="!loggedIn"
           link
         >
           <v-list-item-action>
@@ -92,7 +93,7 @@
         <v-divider/>
 
         <v-list-item
-          @click="newGameDialogIsOpened = true"
+          @click="newGameVsComputerDialogIsOpened = true"
           link
         >
           <v-list-item-action>
@@ -103,7 +104,24 @@
 
           <v-list-item-content>
             <v-list-item-title>
-              New game
+              New game VS computer
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item
+          @click="newGameVsHumanDialogIsOpened = true"
+          link
+        >
+          <v-list-item-action>
+            <v-icon>
+              mdi-plus
+            </v-icon>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <v-list-item-title>
+              New game VS human
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -141,14 +159,23 @@
         v-model="myAccountDialogIsOpened"
         max-width="500"
       >
-        <my-account-form @close="myAccountDialogIsOpened = false"/>
+        <my-account-form
+          @close="myAccountDialogIsOpened = false"
+        />
       </v-dialog>
 
       <v-dialog
-        v-model="newGameDialogIsOpened"
+        v-model="newGameVsComputerDialogIsOpened"
         max-width="500"
       >
-        <new-game-form @close="newGameDialogIsOpened = false"/>
+        <new-game-form-computer @close="newGameVsComputerDialogIsOpened = false"/>
+      </v-dialog>
+
+      <v-dialog
+        v-model="newGameVsHumanDialogIsOpened"
+        max-width="500"
+      >
+        <new-game-form-human @close="newGameVsHumanDialogIsOpened = false"/>
       </v-dialog>
 
     </v-navigation-drawer>
@@ -167,21 +194,24 @@ import {
 const layoutModule = namespace('layout');
 const userModule = namespace('user');
 
-import NewGameForm from '@/components/forms/NewGameForm.vue';
+import NewGameFormComputer from '@/components/forms/NewGameFormComputer.vue';
+import NewGameFormHuman from '@/components/forms/NewGameFormHuman.vue';
 import SignupForm from '@/components/forms/SignupForm.vue';
 import LoginForm from '@/components/forms/LoginForm.vue';
 import MyAccountForm from '@/components/forms/MyAccountForm.vue';
 
 @Component<TheDrawerLeft>({
   components: {
-    NewGameForm,
+    NewGameFormComputer,
+    NewGameFormHuman,
     SignupForm,
     LoginForm,
     MyAccountForm,
   },
 })
 export default class TheDrawerLeft extends Vue {
-  public newGameDialogIsOpened: boolean = false;
+  public newGameVsComputerDialogIsOpened: boolean = false;
+  public newGameVsHumanDialogIsOpened: boolean = false;
   public signupDialogIsOpened: boolean = false;
   public loginDialogIsOpened: boolean = false;
   public myAccountDialogIsOpened: boolean = false;

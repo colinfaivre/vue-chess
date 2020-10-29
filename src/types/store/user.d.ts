@@ -13,3 +13,6 @@ export interface ILoginUserRequestParams {
     password: string,
 }
 
+export interface IUser {
+    email: string,
+}

@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="headline">
-      New game
+      New game VS computer
     </v-card-title>
     
     <v-card-text>
@@ -70,11 +70,11 @@ const layoutModule = namespace('layout');
 const boardModule = namespace('board');
 const stockfishModule = namespace('stockfish');
 
-@Component<NewGameForm>({
+@Component<NewGameFormComputer>({
   components: {
   },
 })
-export default class NewGameForm extends Vue {
+export default class NewGameFormComputer extends Vue {
   public levels = [
     {
       name: 'Easy',
