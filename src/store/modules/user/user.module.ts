@@ -7,13 +7,9 @@ import {
     ISignupUserResponse,
     ILoginUserRequestParams,
     IUser,
-} from '@/types';
+} from '@/store/modules/user/user.d.ts';
 
-import {
-    SET_USER,
-    SET_USERS,
-    CLEAR_USER_DATA,
-} from '@/types/store/mutations/user.mutations';
+import userMutations from '@/store/modules/user/user.mutations';
 
 @Module({
     dynamic: true,
@@ -29,7 +25,7 @@ class User extends VuexModule {
     }
 
     @Mutation
-    private [SET_USER](userData: ISignupUserResponse) {
+    private [userMutations.SET_USER](userData: ISignupUserResponse) {
         console.log(userData);
         this.user = userData;
         localStorage.setItem('user', JSON.stringify(userData));
@@ -37,7 +33,7 @@ class User extends VuexModule {
     }
 
     @Mutation
-    private [SET_USERS](userList: IUser[]) {
+    private [userMutations.SET_USERS](userList: IUser[]) {
         // Filter out the authenticated used from the list of users
         userList = userList.filter(user => user.email !== this.user?.email);
 
@@ -46,7 +42,7 @@ class User extends VuexModule {
     }
 
     @Mutation
-    private [CLEAR_USER_DATA]() {
+    private [userMutations.CLEAR_USER_DATA]() {
         this.user = null;
         localStorage.removeItem('user');
         axios.defaults.headers.common['Authorization'] = null;
@@ -57,7 +53,7 @@ class User extends VuexModule {
         return axios
             .post('//localhost:3000/signup', params)
             .then(({data}) => {
-                this.context.commit(SET_USER, data);
+                this.context.commit(userMutations.SET_USER, data);
             });
     }
 
@@ -66,13 +62,13 @@ class User extends VuexModule {
         return axios
             .post('//localhost:3000/signin', params)
             .then(({data}) => {
-                this.context.commit(SET_USER, data);
+                this.context.commit(userMutations.SET_USER, data);
             });
     }
 
     @Action({ rawError: true })
     public logout() {
-        this.context.commit(CLEAR_USER_DATA);
+        this.context.commit(userMutations.CLEAR_USER_DATA);
     }
 
     @Action({ rawError: true })
@@ -80,7 +76,7 @@ class User extends VuexModule {
         return axios
             .get('//localhost:3000/api/user/all')
             .then(({data}) => {
-                this.context.commit(SET_USERS, data.data);
+                this.context.commit(userMutations.SET_USERS, data.data);
             });
     }
 }

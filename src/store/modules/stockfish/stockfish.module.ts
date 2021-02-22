@@ -4,9 +4,7 @@ import store from '@/store';
 
 const stockfishWorker = new Worker('stockfish.js/stockfish.js', {type: 'module'});
 
-import {
-    SET_COMPUTER_LEVEL,
-} from '@/types/store/mutations/stockfish.mutations';
+import stockfishMutations from '@/store/modules/stockfish/stockfish.mutations';
 
 @Module({
     dynamic: true,
@@ -17,7 +15,7 @@ class Stockfish extends VuexModule {
     public computerLevel: number = 1;
 
     @Mutation
-    private [SET_COMPUTER_LEVEL](level: number) {
+    private [stockfishMutations.SET_COMPUTER_LEVEL](level: number) {
         this.computerLevel = level;
     }
 
@@ -48,7 +46,7 @@ class Stockfish extends VuexModule {
 
     @Action({ rawError: true })
     public setComputerLevel(level: number) {
-        this.context.commit(SET_COMPUTER_LEVEL, level);
+        this.context.commit(stockfishMutations.SET_COMPUTER_LEVEL, level);
     }
 }
 

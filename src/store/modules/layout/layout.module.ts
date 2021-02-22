@@ -1,12 +1,7 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
 import store from '@/store';
 
-import {
-    TOGGLE_LEFT_DRAWER,
-    TOGGLE_RIGHT_DRAWER,
-    SET_DRAWER_LEFT,
-    SET_DRAWER_RIGHT,
-} from '@/types/store/mutations/layout.mutations';
+import layoutMutations from '@/store/modules/layout/layout.mutations';
 
 @Module({
     dynamic: true,
@@ -18,43 +13,43 @@ class Layout extends VuexModule {
     public drawerRightIsOpened: boolean = false;
 
     @Mutation
-    private [TOGGLE_LEFT_DRAWER]() {
+    private [layoutMutations.TOGGLE_LEFT_DRAWER]() {
         this.drawerLeftIsOpened = !this.drawerLeftIsOpened;
     }
 
     @Mutation
-    private [TOGGLE_RIGHT_DRAWER]() {
+    private [layoutMutations.TOGGLE_RIGHT_DRAWER]() {
         this.drawerRightIsOpened = !this.drawerRightIsOpened;
     }
 
     @Mutation
-    private [SET_DRAWER_LEFT](value: boolean) {
+    private [layoutMutations.SET_DRAWER_LEFT](value: boolean) {
         this.drawerLeftIsOpened = value;
     }
 
     @Mutation
-    private [SET_DRAWER_RIGHT](value: boolean) {
+    private [layoutMutations.SET_DRAWER_RIGHT](value: boolean) {
         this.drawerRightIsOpened = value;
     }
 
     @Action({rawError: true})
     public toggleLeftDrawer(): void{
-        this.context.commit(TOGGLE_LEFT_DRAWER);
+        this.context.commit(layoutMutations.TOGGLE_LEFT_DRAWER);
     }
 
     @Action({rawError: true})
     public toggleRightDrawer(): void{
-        this.context.commit(TOGGLE_RIGHT_DRAWER);
+        this.context.commit(layoutMutations.TOGGLE_RIGHT_DRAWER);
     }
 
     @Action({rawError: true})
     public setDrawerLeft(value: boolean): void{
-        this.context.commit(SET_DRAWER_LEFT, value);
+        this.context.commit(layoutMutations.SET_DRAWER_LEFT, value);
     }
 
     @Action({rawError: true})
     public setDrawerRight(value: boolean): void{
-        this.context.commit(SET_DRAWER_RIGHT, value);
+        this.context.commit(layoutMutations.SET_DRAWER_RIGHT, value);
     }
 }
 

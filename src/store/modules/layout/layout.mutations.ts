@@ -1,0 +1,8 @@
+enum layoutMutations {
+    TOGGLE_LEFT_DRAWER = 'TOGGLE_LEFT_DRAWER',
+    SET_DRAWER_LEFT = 'SET_DRAWER_LEFT',
+    TOGGLE_RIGHT_DRAWER = 'TOGGLE_RIGHT_DRAWER',
+    SET_DRAWER_RIGHT = 'SET_DRAWER_RIGHT',
+}
+
+export default layoutMutations;

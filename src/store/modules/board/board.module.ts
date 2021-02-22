@@ -1,7 +1,5 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
-import {
-    StockfishModule,
-} from '@/store/modules';
+import { StockfishModule } from '@/store/modules';
 import store from '@/store';
 
 import {
@@ -15,22 +13,9 @@ import {
     ICellPosition,
     IPiece,
     IMove,
-} from '@/types';
+} from '@/store/modules/board/board.d.ts';
 
-import {
-    SELECT_PIECE,
-    UNSELECT_ALL_PIECES,
-    SHOW_POSSIBLE_MOVES,
-    HIDE_POSSIBLE_DESTINATIONS,
-    HIDE_POSSIBLE_KILLS,
-    REMOVE_PIECE_FROM,
-    ADD_PIECE,
-    TOGGLE_PLAYER,
-    INCREMENT_ROUND,
-    ADD_MOVE,
-    SET_PLAYER_COLOR,
-    RESET_GAME,
-} from '@/types/store/mutations/board.mutations';
+import boardMutations from '@/store/modules/board/board.mutations';
 
 import {
     BLACK_PAWN_MOVES,
@@ -96,7 +81,7 @@ class Board extends VuexModule {
     }
 
     @Mutation
-    private [UNSELECT_ALL_PIECES]() {
+    private [boardMutations.UNSELECT_ALL_PIECES]() {
         for (const row in this.board) {
             for (const column in this.board[row]) {
                 if (this.board[row][column].piece !== null) {
@@ -107,7 +92,7 @@ class Board extends VuexModule {
     }
 
     @Mutation
-    private [HIDE_POSSIBLE_DESTINATIONS]() {
+    private [boardMutations.HIDE_POSSIBLE_DESTINATIONS]() {
         for (const row in this.board) {
             for (const column in this.board[row]) {
                 this.board[row][column].possibleDestination = false;
@@ -116,7 +101,7 @@ class Board extends VuexModule {
     }
 
     @Mutation
-    private [HIDE_POSSIBLE_KILLS]() {
+    private [boardMutations.HIDE_POSSIBLE_KILLS]() {
         for (const row in this.board) {
             for (const column in this.board[row]) {
                 this.board[row][column].possibleKill = false;
@@ -125,14 +110,14 @@ class Board extends VuexModule {
     }
 
     @Mutation
-    private [SELECT_PIECE](cellPosition: ICellPosition) {
+    private [boardMutations.SELECT_PIECE](cellPosition: ICellPosition) {
         this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece!.selected = true;
         this.selectedPiece = this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece;
 
     }
 
     @Mutation
-    private [ADD_PIECE](path: IPath) {
+    private [boardMutations.ADD_PIECE](path: IPath) {
         if (this.board[path.to.columnIndex][path.to.rowIndex].piece !== null) {
             if (this.hasToPlay === 'white') {
                 this.playerCapturedPieces.push(this.board[path.to.columnIndex][path.to.rowIndex].piece!);
@@ -148,12 +133,12 @@ class Board extends VuexModule {
     }
 
     @Mutation
-    private [REMOVE_PIECE_FROM](cellPosition: ICellPosition) {
+    private [boardMutations.REMOVE_PIECE_FROM](cellPosition: ICellPosition) {
         this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece = null;
     }
 
     @Mutation
-    private [TOGGLE_PLAYER]() {
+    private [boardMutations.TOGGLE_PLAYER]() {
         if (this.hasToPlay === 'white') {
             this.hasToPlay = 'black';
         } else {
@@ -162,17 +147,17 @@ class Board extends VuexModule {
     }
 
     @Mutation
-    private [INCREMENT_ROUND]() {
+    private [boardMutations.INCREMENT_ROUND]() {
         this.round++;
     }
 
     @Mutation
-    private [SET_PLAYER_COLOR](color: string) {
+    private [boardMutations.SET_PLAYER_COLOR](color: string) {
         this.playerColor = color;
     }
 
     @Mutation
-    private [ADD_MOVE](move: IMove) {
+    private [boardMutations.ADD_MOVE](move: IMove) {
         this.moveStart = getANCoords(move.startPosition);
         this.moveEnd = getANCoords(move.endPosition);
         if (this.moveStart && this.moveEnd) {
@@ -181,14 +166,14 @@ class Board extends VuexModule {
     }
 
     @Mutation
-    private [RESET_GAME]() {
+    private [boardMutations.RESET_GAME]() {
         this.board = boardSnapshotParser(this.initialBoardSnapshot);
         this.moves = [];
         this.round = 1;
     }
 
     @Mutation
-    private [SHOW_POSSIBLE_MOVES](cellPosition: ICellPosition) {
+    private [boardMutations.SHOW_POSSIBLE_MOVES](cellPosition: ICellPosition) {
         const validateMove = (columnMove: number, rowMove: number): string|object|undefined => {
             // Check if move is not out of board
             const destinationCellIsInRow = cellPosition.rowIndex + rowMove >= 0 && cellPosition.rowIndex + rowMove <= 7;
@@ -292,13 +277,13 @@ class Board extends VuexModule {
 
     @Action({ rawError: true })
     public selectOrigin(from: ICellPosition) {
-        this.context.commit(UNSELECT_ALL_PIECES);
-        this.context.commit(HIDE_POSSIBLE_DESTINATIONS);
-        this.context.commit(HIDE_POSSIBLE_KILLS);
+        this.context.commit(boardMutations.UNSELECT_ALL_PIECES);
+        this.context.commit(boardMutations.HIDE_POSSIBLE_DESTINATIONS);
+        this.context.commit(boardMutations.HIDE_POSSIBLE_KILLS);
 
         if (this.hasToPlay === this.board[from.columnIndex][from.rowIndex].piece!.color) {
-            this.context.commit(SELECT_PIECE, from);
-            this.context.commit(SHOW_POSSIBLE_MOVES, from);
+            this.context.commit(boardMutations.SELECT_PIECE, from);
+            this.context.commit(boardMutations.SHOW_POSSIBLE_MOVES, from);
         }
     }
 
@@ -308,9 +293,9 @@ class Board extends VuexModule {
         console.log('startPosition', move.startPosition);
         console.log('endPosition', move.endPosition);
 
-        this.context.commit(ADD_MOVE, {startPosition: move.startPosition, endPosition: move.endPosition});
-        this.context.commit(ADD_PIECE, {from: move.startPosition, to: move.endPosition});
-        this.context.commit(REMOVE_PIECE_FROM, move.startPosition);
+        this.context.commit(boardMutations.ADD_MOVE, {startPosition: move.startPosition, endPosition: move.endPosition});
+        this.context.commit(boardMutations.ADD_PIECE, {from: move.startPosition, to: move.endPosition});
+        this.context.commit(boardMutations.REMOVE_PIECE_FROM, move.startPosition);
     }
 
     @Action({ rawError: true })
@@ -318,12 +303,12 @@ class Board extends VuexModule {
         this.move({startPosition: this.selectedPiecePosition, endPosition});
 
         // CLEAR BOARD
-        this.context.commit(UNSELECT_ALL_PIECES);
-        this.context.commit(HIDE_POSSIBLE_DESTINATIONS);
-        this.context.commit(HIDE_POSSIBLE_KILLS);
+        this.context.commit(boardMutations.UNSELECT_ALL_PIECES);
+        this.context.commit(boardMutations.HIDE_POSSIBLE_DESTINATIONS);
+        this.context.commit(boardMutations.HIDE_POSSIBLE_KILLS);
 
-        this.context.commit(INCREMENT_ROUND);
-        this.context.commit(TOGGLE_PLAYER);
+        this.context.commit(boardMutations.INCREMENT_ROUND);
+        this.context.commit(boardMutations.TOGGLE_PLAYER);
 
         StockfishModule.guessNextMove(this.movesAsString);
     }
@@ -332,19 +317,19 @@ class Board extends VuexModule {
     public stockfishPlays(move: string) {
         this.move(getMoveFromAN(move));
 
-        this.context.commit(INCREMENT_ROUND);
-        this.context.commit(TOGGLE_PLAYER);
+        this.context.commit(boardMutations.INCREMENT_ROUND);
+        this.context.commit(boardMutations.TOGGLE_PLAYER);
     }
 
     @Action({ rawError: true })
     public setPlayerColor(color: string) {
-        this.context.commit(SET_PLAYER_COLOR, color);
+        this.context.commit(boardMutations.SET_PLAYER_COLOR, color);
     }
 
     @Action({ rawError: true })
     public startNewGame() {
         this.context.dispatch('stockfish/init', null, {root: true});
-        this.context.commit(RESET_GAME);
+        this.context.commit(boardMutations.RESET_GAME);
     }
 }
 

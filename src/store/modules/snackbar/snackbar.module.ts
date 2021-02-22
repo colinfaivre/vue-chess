@@ -1,14 +1,10 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
 import store from '@/store';
 
-import {
-    SET_PARAMS,
-    SET_SHOW,
-} from '@/types/store/mutations/snackbar.mutations';
-
+import snackbarMutations from '@/store/modules/snackbar/snackbar.mutations';
 import {
     ISnackbarDisplayParams,
-} from '@/types';
+} from '@/store/modules/snackbar/snackbar.d.ts';
 
 @Module({
     dynamic: true,
@@ -40,44 +36,44 @@ class Snackbar extends VuexModule {
 
     @Action({rawError: true})
     public display(params: ISnackbarDisplayParams) {
-        this.context.commit(SET_PARAMS, params);
-        this.context.commit(SET_SHOW, true);
+        this.context.commit(snackbarMutations.SET_PARAMS, params);
+        this.context.commit(snackbarMutations.SET_SHOW, true);
     }
 
     @Action({rawError: true})
     public displayError(message?: string|null) {
-        this.context.commit(SET_PARAMS, {
+        this.context.commit(snackbarMutations.SET_PARAMS, {
             message: message ? message : 'Une erreur est survenue. Veuillez réessayer ulterieurement.',
             position: 'top',
             color: 'error',
         });
-        this.context.commit(SET_SHOW, true);
+        this.context.commit(snackbarMutations.SET_SHOW, true);
     }
 
     @Action({rawError: true})
     public displaySuccess(message: string) {
-        this.context.commit(SET_PARAMS, {
+        this.context.commit(snackbarMutations.SET_PARAMS, {
             message,
             position: 'top',
             color: 'success',
         });
-        this.context.commit(SET_SHOW, true);
+        this.context.commit(snackbarMutations.SET_SHOW, true);
     }
 
     @Action({rawError: true})
     public hide() {
-        this.context.commit(SET_SHOW, false);
+        this.context.commit(snackbarMutations.SET_SHOW, false);
     }
 
     @Mutation
-    private [SET_PARAMS](params: ISnackbarDisplayParams) {
+    private [snackbarMutations.SET_PARAMS](params: ISnackbarDisplayParams) {
         this.message = params.message;
         this.color = params.color;
         this.position = params.position;
     }
 
     @Mutation
-    private [SET_SHOW](show: boolean) {
+    private [snackbarMutations.SET_SHOW](show: boolean) {
         this.show = show;
     }
 }

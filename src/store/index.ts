@@ -10,12 +10,5 @@ import {
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  // modules: {
-  //   board: BoardModule,
-  //   stockfish: StockfishModule,
-  //   layout: LayoutModule,
-  //   user: UserModule,
-  //   snackbar: SnackbarModule,
-  // }
-});
+// Declare empty store first, dynamically register all modules later.
+export default new Vuex.Store({});
