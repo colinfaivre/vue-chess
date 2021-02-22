@@ -1,4 +1,5 @@
-import {VuexModule, Module, Mutation, Action} from 'vuex-module-decorators';
+import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
+import store from '@/store';
 
 import {
     SET_PARAMS,
@@ -10,10 +11,11 @@ import {
 } from '@/types';
 
 @Module({
-    namespaced: true,
+    dynamic: true,
     name: 'snackbar',
+    store: store,
 })
-export class SnackbarModule extends VuexModule {
+class Snackbar extends VuexModule {
     public show: boolean = false;
     public message: string = '';
     public color: string = '';
@@ -79,3 +81,5 @@ export class SnackbarModule extends VuexModule {
         this.show = show;
     }
 }
+
+export const SnackbarModule = getModule(Snackbar);

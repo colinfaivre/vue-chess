@@ -30,25 +30,19 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
-
-import { namespace } from "vuex-class";
-import { getModule } from "vuex-module-decorators";
-
+import { Component, Vue } from "vue-property-decorator";
 import { UserModule } from "@/store/modules";
-const userModule = namespace("user");
 
-@Component<MyAccountForm>({
-  components: {},
-})
+@Component<MyAccountForm>({})
 export default class MyAccountForm extends Vue {
   public firstName: string = "";
   public lastName: string = "";
   public age: string = "";
   public bio: string = "";
 
-  @userModule.State
-  private user!: object;
+  get user() {
+    return UserModule.user;
+  }
 
   public cancel(): void {
     this.$emit("close");

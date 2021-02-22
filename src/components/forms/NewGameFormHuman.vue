@@ -3,7 +3,7 @@
     <v-card-title class="headline">
       New game VS human
     </v-card-title>
-    
+
     <v-card-text>
       <div class="mt-0 mb-10">
         Choose your opponent among the players list.
@@ -24,7 +24,7 @@
 
     <v-card-actions>
       <v-spacer/>
-      
+
       <v-btn
         @click="cancel()"
         color="blue-grey darken-3"
@@ -46,18 +46,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
+import { UserModule } from '@/store/modules';
 
-import { namespace } from 'vuex-class';
-import { getModule } from 'vuex-module-decorators';
-import {
-  UserModule,
-} from '@/store/modules';
-const userModule = namespace('user');
-
-@Component<NewGameFormHuman>({
-  components: {
-  },
-})
+@Component<NewGameFormHuman>({})
 export default class NewGameFormHuman extends Vue {
   public levels = [
     {
@@ -74,8 +65,9 @@ export default class NewGameFormHuman extends Vue {
     },
   ]
 
-  @userModule.State
-  private users!: object[];
+  get users() {
+    return UserModule.users;
+  }
 
   // get level() {
   //   return this.computerLevel;
@@ -97,8 +89,7 @@ export default class NewGameFormHuman extends Vue {
   }
 
   public created() {
-    const userModule = getModule(UserModule, this.$store);
-    userModule.getAllUsers();
+    UserModule.getAllUsers();
   }
 }
 </script>

@@ -182,16 +182,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
-
-import { namespace } from 'vuex-class';
-import { getModule } from 'vuex-module-decorators';
+import { Component, Vue } from "vue-property-decorator";
 
 import {
   LayoutModule,
   UserModule,
 } from '@/store/modules';
-const userModule = namespace('user');
 
 import NewGameFormComputer from '@/components/forms/NewGameFormComputer.vue';
 import NewGameFormHuman from '@/components/forms/NewGameFormHuman.vue';
@@ -219,8 +215,9 @@ export default class TheDrawerLeft extends Vue {
     return LayoutModule.drawerLeftIsOpened;
   }
 
-  @userModule.Getter
-  private loggedIn!: boolean;
+  get loggedIn() {
+    return UserModule.loggedIn;
+  }
 
   get opened() {
     return this.drawerLeftIsOpened;
@@ -231,9 +228,7 @@ export default class TheDrawerLeft extends Vue {
   }
 
   public logout() {
-    const userModule = getModule(UserModule, this.$store);
-
-    userModule.logout()
+    UserModule.logout();
   }
 }
 </script>

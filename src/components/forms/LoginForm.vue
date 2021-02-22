@@ -3,7 +3,7 @@
     <v-card-title class="headline">
       Login
     </v-card-title>
-    
+
     <v-card-text>
       <div class="mt-0 mb-10">
         Login to you Vue chess account to play with anybody around the world.
@@ -30,7 +30,7 @@
 
     <v-card-actions>
       <v-spacer/>
-      
+
       <v-btn
         @click="close()"
         color="blue-grey darken-3"
@@ -51,8 +51,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
-import { getModule } from 'vuex-module-decorators';
+import { Component, Vue } from "vue-property-decorator";
 
 import {
   UserModule,
@@ -63,10 +62,7 @@ import {
   ILoginUserRequestParams,
 } from '@/types/store/user';
 
-@Component<LoginForm>({
-  components: {
-  },
-})
+@Component<LoginForm>({})
 export default class LoginForm extends Vue {
   public email: string = '';
   public password: string = '';
@@ -82,20 +78,18 @@ export default class LoginForm extends Vue {
   }
 
   public login() {
-    const userModule = getModule(UserModule, this.$store);
-    const snackbarModule = getModule(SnackbarModule, this.$store);
     const loginUserParams: ILoginUserRequestParams = {
       email: this.email,
       password: this.password,
     };
 
-    userModule
+    UserModule
       .login(loginUserParams)
       .then(() => {
         this.close();
       })
       .catch(error => {
-        snackbarModule.displayError('Adresse email ou mot de passe incorrect')
+        SnackbarModule.displayError('Adresse email ou mot de passe incorrect')
       })
   }
 }

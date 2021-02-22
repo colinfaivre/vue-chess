@@ -1,4 +1,5 @@
-import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
+import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
+import store from '@/store';
 import axios from 'axios';
 
 import {
@@ -15,10 +16,11 @@ import {
 } from '@/types/store/mutations/user.mutations';
 
 @Module({
-    namespaced: true,
+    dynamic: true,
     name: 'user',
+    store: store,
 })
-export class UserModule extends VuexModule {
+class User extends VuexModule {
     public user: IUser | null = null;
     public users: IUser[] = [];
 
@@ -82,3 +84,5 @@ export class UserModule extends VuexModule {
             });
     }
 }
+
+export const UserModule = getModule(User);
