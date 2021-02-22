@@ -59,13 +59,10 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
-import { namespace } from 'vuex-class';
-import { getModule } from 'vuex-module-decorators';
 import {
   BoardModule,
   StockfishModule,
 } from '@/store/modules';
-const stockfishModule = namespace('stockfish');
 
 @Component<NewGameFormComputer>({})
 export default class NewGameFormComputer extends Vue {
@@ -84,16 +81,16 @@ export default class NewGameFormComputer extends Vue {
     },
   ]
 
-  @stockfishModule.State
-  private computerLevel!: number;
+  get computerLevel() {
+    return StockfishModule.computerLevel;
+  }
 
   get level() {
     return this.computerLevel;
   }
 
   set level(value: number) {
-    const stockfishModule = getModule(StockfishModule, this.$store);
-    stockfishModule.setComputerLevel(value);
+    StockfishModule.setComputerLevel(value);
   }
 
   public colors = [

@@ -3,7 +3,7 @@
     <div class="board-container elevation-4">
 
       <captured-pieces-area side="computer"/>
-      
+
       <has-to-play-line color="black"/>
 
       <board/>
@@ -18,10 +18,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { namespace } from 'vuex-class';
-import { getModule } from 'vuex-module-decorators';
 import { StockfishModule } from '@/store/modules';
-const stockfishModule = namespace('stockfish');
 
 import Board from "@/components/Board.vue";
 import CapturedPiecesArea from "@/components/CapturedPiecesArea.vue";
@@ -36,8 +33,7 @@ import HasToPlayLine from "@/components/HasToPlayLine.vue";
 })
 export default class BoardContainer extends Vue {
   created() {
-    const stockfishModule = getModule(StockfishModule, this.$store);
-    stockfishModule.init();
+    StockfishModule.init();
   }
 }
 </script>

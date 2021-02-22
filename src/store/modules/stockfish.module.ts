@@ -1,4 +1,6 @@
-import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
+import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
+import {BoardModule} from '@/store/modules';
+import store from '@/store';
 
 const stockfishWorker = new Worker('stockfish.js/stockfish.js', {type: 'module'});
 
@@ -7,10 +9,11 @@ import {
 } from '@/types/store/mutations/stockfish.mutations';
 
 @Module({
-    namespaced: true,
+    dynamic: true,
     name: 'stockfish',
+    store: store,
 })
-export class StockfishModule extends VuexModule {
+class Stockfish extends VuexModule {
     public computerLevel: number = 1;
 
     @Mutation
@@ -28,7 +31,7 @@ export class StockfishModule extends VuexModule {
 
         stockfishWorker.onmessage = function(e) {
             if (e.data.split(' ')[0] === 'bestmove') {
-                context.dispatch('board/stockfishPlays', e.data.split(' ')[1], {root: true});
+                BoardModule.stockfishPlays(e.data.split(' ')[1])
             }
         }
     }
@@ -48,3 +51,5 @@ export class StockfishModule extends VuexModule {
         this.context.commit(SET_COMPUTER_LEVEL, level);
     }
 }
+
+export const StockfishModule = getModule(Stockfish);

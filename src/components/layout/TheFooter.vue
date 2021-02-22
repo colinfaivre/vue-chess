@@ -34,8 +34,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 
-import {namespace} from 'vuex-class';
-import { getModule } from 'vuex-module-decorators';
 import { BoardModule } from '@/store/modules';
 
 @Component<TheFooter>({})

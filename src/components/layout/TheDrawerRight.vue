@@ -33,13 +33,11 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { namespace } from 'vuex-class';
 import {
   BoardModule,
   StockfishModule,
   LayoutModule,
 } from '@/store/modules';
-const stockfishModule = namespace('stockfish');
 
 @Component<TheDrawerRight>({})
 export default class TheDrawerRight extends Vue {
@@ -47,8 +45,9 @@ export default class TheDrawerRight extends Vue {
     return LayoutModule.drawerRightIsOpened;
   }
 
-  @stockfishModule.State
-  private computerLevel!: number;
+  get computerLevel() {
+    return StockfishModule.computerLevel;
+  }
 
   get round() {
     return BoardModule.round;

@@ -11,7 +11,6 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { namespace } from 'vuex-class';
 import {
   BoardModule,
 } from '@/store/modules';

@@ -36,15 +36,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { namespace } from 'vuex-class';
+import {SnackbarModule} from '@/store/modules';
 
 import BoardContainer from './components/BoardContainer.vue';
 import TheDrawerLeft from "@/components/layout/TheDrawerLeft.vue";
 import TheDrawerRight from "@/components/layout/TheDrawerRight.vue";
 import TheAppBar from "@/components/layout/TheAppBar.vue";
 import TheFooter from '@/components/layout/TheFooter.vue';
-
-const snackbarNamespace = namespace('snackbar');
 
 @Component<App>({
   components: {
@@ -56,17 +54,17 @@ const snackbarNamespace = namespace('snackbar');
   },
 })
 export default class App extends Vue {
-  @snackbarNamespace.Getter('showSnackbar')
-  public showSnackbarGetter!: boolean;
+  get showSnackbarGetter() {
+    return SnackbarModule.showSnackbar;
+  }
 
-  @snackbarNamespace.Getter('snackbarMessage')
-  public snackbarMessage!: string;
+  get snackbarMessage() {
+    return SnackbarModule.snackbarMessage;
+  }
 
-  @snackbarNamespace.Getter('snackbarColor')
-  public snackbarColor!: string;
-
-  @snackbarNamespace.Action('hide')
-  public hideSnackbar!: () => void;
+  get snackbarColor() {
+    return SnackbarModule.snackbarColor;
+  }
 
   get showSnackbar() {
     return this.showSnackbarGetter;
@@ -74,8 +72,12 @@ export default class App extends Vue {
 
   set showSnackbar(value: any) {
     if (!value) {
-        this.hideSnackbar();
+      this.hideSnackbar();
     }
+  }
+
+  public hideSnackbar() {
+    SnackbarModule.hide();
   }
 }
 </script>

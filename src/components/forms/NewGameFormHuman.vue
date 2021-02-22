@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { UserModule, BoardModule } from '@/store/modules';
+import { UserModule, BoardModule, StockfishModule } from '@/store/modules';
 
 @Component<NewGameFormHuman>({})
 export default class NewGameFormHuman extends Vue {
@@ -74,8 +74,7 @@ export default class NewGameFormHuman extends Vue {
   // }
 
   // set level(value: number) {
-  //   const stockfishModule = getModule(StockfishModule, this.$store);
-  //   stockfishModule.setComputerLevel(value);
+  //   StockfishModule.setComputerLevel(value);
   // }
 
   public cancel(): void {

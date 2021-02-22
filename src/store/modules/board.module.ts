@@ -1,4 +1,7 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
+import {
+    StockfishModule,
+} from '@/store/modules';
 import store from '@/store';
 
 import {
@@ -322,7 +325,7 @@ class Board extends VuexModule {
         this.context.commit(INCREMENT_ROUND);
         this.context.commit(TOGGLE_PLAYER);
 
-        this.context.dispatch('stockfish/guessNextMove', this.movesAsString, {root: true});
+        StockfishModule.guessNextMove(this.movesAsString);
     }
 
     @Action({ rawError: true })

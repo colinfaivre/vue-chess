@@ -38,13 +38,10 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import { namespace } from 'vuex-class';
-import { getModule } from 'vuex-module-decorators';
 import {
   BoardModule,
   StockfishModule,
 } from '@/store/modules';
-const stockfishModule = namespace('stockfish');
 
 import {
     ICell,
@@ -71,8 +68,7 @@ export default class BoardContainer extends Vue {
   }
 
   created() {
-    const stockfishModule = getModule(StockfishModule, this.$store);
-    stockfishModule.init();
+    StockfishModule.init();
   }
 }
 </script>
