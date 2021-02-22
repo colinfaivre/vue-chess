@@ -8,14 +8,13 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { namespace } from 'vuex-class';
 import { BoardModule } from '@/store/modules';
-const boardModule = namespace('board');
 
 @Component<BoardContainer>({})
 export default class BoardContainer extends Vue {
-  @boardModule.State
-  private hasToPlay!: string;
+  get hasToPlay() {
+    return BoardModule.hasToPlay;
+  }
 
   @Prop({
       type: String,

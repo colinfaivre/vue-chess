@@ -11,7 +11,7 @@
         class="cell"
         :class="`cell--${cell.color}`"
       >
-        
+
         <piece
           v-if="cell.piece"
           :color="cell.piece.color"
@@ -44,7 +44,6 @@ import {
   BoardModule,
   StockfishModule,
 } from '@/store/modules';
-const boardModule = namespace('board');
 const stockfishModule = namespace('stockfish');
 
 import {
@@ -63,12 +62,12 @@ import CapturedPiecesArea from "@/components/CapturedPiecesArea.vue";
   },
 })
 export default class BoardContainer extends Vue {
-  @boardModule.State
-  private board!: ICell[][];
+  get board() {
+    return BoardModule.board;
+  }
 
   public selectDestination(cellPosition: ICellPosition) {
-    const boardModule = getModule(BoardModule, this.$store);
-    boardModule.selectDestination(cellPosition);
+    BoardModule.selectDestination(cellPosition);
   }
 
   created() {

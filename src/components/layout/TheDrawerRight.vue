@@ -39,13 +39,9 @@ import {
   StockfishModule,
   LayoutModule,
 } from '@/store/modules';
-const boardModule = namespace('board');
 const stockfishModule = namespace('stockfish');
 
-@Component<TheDrawerRight>({
-  components: {
-  },
-})
+@Component<TheDrawerRight>({})
 export default class TheDrawerRight extends Vue {
   get drawerRightIsOpened() {
     return LayoutModule.drawerRightIsOpened;
@@ -54,14 +50,17 @@ export default class TheDrawerRight extends Vue {
   @stockfishModule.State
   private computerLevel!: number;
 
-  @boardModule.State
-  private round!: number;
+  get round() {
+    return BoardModule.round;
+  }
 
-  @boardModule.State
-  private hasToPlay!: string;
+  get hasToPlay(){
+    return BoardModule.hasToPlay;
+  }
 
-  @boardModule.State
-  private moves!: string[];
+  get moves() {
+    return BoardModule.moves;
+  }
 
   get playerHasToPlay() {
     return this.hasToPlay === 'white' ? 'White to play' : 'Black to play';

@@ -1,5 +1,5 @@
 <template>
-    <div  
+    <div
       class="captured-pieces d-flex"
       :class="`captured-pieces--${side}`"
     >
@@ -12,11 +12,9 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { namespace } from 'vuex-class';
-import { getModule } from 'vuex-module-decorators';
 import {
   BoardModule,
 } from '@/store/modules';
-const boardModule = namespace('board');
 
 import {
     ICell,
@@ -38,11 +36,13 @@ export default class Board extends Vue {
   })
   public side!: String;
 
-  @boardModule.State
-  private playerCapturedPieces!: IPiece[];
+  get playerCapturedPieces() {
+    return BoardModule.playerCapturedPieces;
+  }
 
-  @boardModule.State
-  private computerCapturedPieces!: IPiece[];
+  get computerCapturedPieces() {
+    return BoardModule.computerCapturedPieces;
+  }
 
   get capturedPieces() {
     if (this.side === 'computer') {

@@ -37,18 +37,15 @@ import Component from 'vue-class-component';
 import {namespace} from 'vuex-class';
 import { getModule } from 'vuex-module-decorators';
 import { BoardModule } from '@/store/modules';
-const boardModule = namespace('board');
 
 @Component<TheFooter>({})
 export default class TheFooter extends Vue {
   public goToPreviousPosition() {
-    // const boardModule = getModule(BoardModule, this.$store);
-    // boardModule.goToPreviousPosition();
+    // BoardModule.goToPreviousPosition();
   }
 
   public goToNextPosition() {
-    // const boardModule = getModule(BoardModule, this.$store);
-    // boardModule.goToNextPosition();
+    // BoardModule.goToNextPosition();
   }
 };
 </script>

@@ -45,8 +45,8 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
-import { UserModule } from '@/store/modules';
+import { Component, Vue } from "vue-property-decorator";
+import { UserModule, BoardModule } from '@/store/modules';
 
 @Component<NewGameFormHuman>({})
 export default class NewGameFormHuman extends Vue {
@@ -84,8 +84,7 @@ export default class NewGameFormHuman extends Vue {
 
   public start(): void {
     this.$emit('close');
-    // const boardModule = getModule(BoardModule, this.$store);
-    // boardModule.startNewGame();
+    // BoardModule.startNewGame();
   }
 
   public created() {

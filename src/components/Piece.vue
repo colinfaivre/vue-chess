@@ -15,9 +15,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
-import { namespace } from "vuex-class"
-import { getModule } from 'vuex-module-decorators';
 import { BoardModule } from '@/store/modules';
+import { ICellPosition } from "@/types";
 
 @Component<Piece>({
   components: {},
@@ -45,11 +44,10 @@ export default class Piece extends Vue {
       type: Object,
       required: false,
   })
-  public cell!: object;
+  public cell!: ICellPosition;
 
   public selectOrigin() {
-    const boardModule = getModule(BoardModule, this.$store);
-    boardModule.selectOrigin(this.cell);
+    BoardModule.selectOrigin(this.cell);
   }
 }
 </script>

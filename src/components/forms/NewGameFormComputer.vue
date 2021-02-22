@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 
 import { namespace } from 'vuex-class';
 import { getModule } from 'vuex-module-decorators';
@@ -65,13 +65,9 @@ import {
   BoardModule,
   StockfishModule,
 } from '@/store/modules';
-const boardModule = namespace('board');
 const stockfishModule = namespace('stockfish');
 
-@Component<NewGameFormComputer>({
-  components: {
-  },
-})
+@Component<NewGameFormComputer>({})
 export default class NewGameFormComputer extends Vue {
   public levels = [
     {
@@ -111,16 +107,16 @@ export default class NewGameFormComputer extends Vue {
     },
   ]
 
-  @boardModule.State
-  private playerColor!: string;
+  get playerColor() {
+    return BoardModule.playerColor;
+  }
 
   get color() {
     return this.playerColor;
   }
 
   set color(value: string) {
-    const boardModule = getModule(BoardModule, this.$store);
-    boardModule.setPlayerColor(value);
+    BoardModule.setPlayerColor(value);
   }
 
   public cancel(): void {
@@ -129,8 +125,7 @@ export default class NewGameFormComputer extends Vue {
 
   public start(): void {
     this.$emit('close');
-    const boardModule = getModule(BoardModule, this.$store);
-    boardModule.startNewGame();
+    BoardModule.startNewGame();
   }
 }
 </script>

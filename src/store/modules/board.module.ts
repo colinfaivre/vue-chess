@@ -1,7 +1,8 @@
-import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
+import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
+import store from '@/store';
 
 import {
-    getANCoords, 
+    getANCoords,
     getMoveFromAN,
 } from '@/helpers/stockfish';
 
@@ -42,10 +43,11 @@ import boardSnapshotParser from '@/data/boardSnapshotParser';
 import boardSerializer from '@/data/boardSerializer';
 
 @Module({
-    namespaced: true,
+    dynamic: true,
     name: 'board',
+    store: store,
 })
-export class BoardModule extends VuexModule {
+class Board extends VuexModule {
     public playerColor: string = 'white';
     public initialBoardSnapshot = [
         'rnbqkbnr',
@@ -123,7 +125,7 @@ export class BoardModule extends VuexModule {
     private [SELECT_PIECE](cellPosition: ICellPosition) {
         this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece!.selected = true;
         this.selectedPiece = this.board[cellPosition.columnIndex][cellPosition.rowIndex].piece;
-        
+
     }
 
     @Mutation
@@ -342,3 +344,5 @@ export class BoardModule extends VuexModule {
         this.context.commit(RESET_GAME);
     }
 }
+
+export const BoardModule = getModule(Board);
