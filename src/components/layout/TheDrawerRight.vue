@@ -32,16 +32,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import { namespace } from 'vuex-class';
-import { getModule } from 'vuex-module-decorators';
 import {
   BoardModule,
   StockfishModule,
   LayoutModule,
 } from '@/store/modules';
 const boardModule = namespace('board');
-const layoutModule = namespace('layout');
 const stockfishModule = namespace('stockfish');
 
 @Component<TheDrawerRight>({
@@ -49,8 +47,9 @@ const stockfishModule = namespace('stockfish');
   },
 })
 export default class TheDrawerRight extends Vue {
-  @layoutModule.State
-  private drawerRightIsOpened!: boolean;
+  get drawerRightIsOpened() {
+    return LayoutModule.drawerRightIsOpened;
+  }
 
   @stockfishModule.State
   private computerLevel!: number;
@@ -73,8 +72,7 @@ export default class TheDrawerRight extends Vue {
   }
 
   set opened(value: boolean) {
-    const layoutModule = getModule(LayoutModule, this.$store);
-    layoutModule.setDrawerRight(value);
+    LayoutModule.setDrawerRight(value);
   }
 
   public moveColor(index: number) {

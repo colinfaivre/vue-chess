@@ -34,21 +34,16 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 
-import {namespace} from 'vuex-class';
-import { getModule } from 'vuex-module-decorators';
 import { LayoutModule } from '@/store/modules';
-const layoutModule = namespace('layout');
 
 @Component<AppBar>({})
 export default class AppBar extends Vue {
   public toggleLeftDrawer() {
-    const layoutModule = getModule(LayoutModule, this.$store);
-    layoutModule.toggleLeftDrawer();
+    LayoutModule.toggleLeftDrawer();
   }
 
   public toggleRightDrawer() {
-    const layoutModule = getModule(LayoutModule, this.$store);
-    layoutModule.toggleRightDrawer();
+    LayoutModule.toggleRightDrawer();
   }
 };
 </script>

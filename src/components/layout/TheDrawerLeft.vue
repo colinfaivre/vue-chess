@@ -132,7 +132,7 @@
               mdi-cog
             </v-icon>
           </v-list-item-action>
-          
+
           <v-list-item-content>
             <v-list-item-title>
               Settings
@@ -191,7 +191,6 @@ import {
   LayoutModule,
   UserModule,
 } from '@/store/modules';
-const layoutModule = namespace('layout');
 const userModule = namespace('user');
 
 import NewGameFormComputer from '@/components/forms/NewGameFormComputer.vue';
@@ -216,8 +215,9 @@ export default class TheDrawerLeft extends Vue {
   public loginDialogIsOpened: boolean = false;
   public myAccountDialogIsOpened: boolean = false;
 
-  @layoutModule.State
-  private drawerLeftIsOpened!: boolean;
+  get drawerLeftIsOpened() {
+    return LayoutModule.drawerLeftIsOpened;
+  }
 
   @userModule.Getter
   private loggedIn!: boolean;
@@ -227,14 +227,13 @@ export default class TheDrawerLeft extends Vue {
   }
 
   set opened(value: boolean) {
-    const layoutModule = getModule(LayoutModule, this.$store);
-    layoutModule.setDrawerLeft(value);
+    LayoutModule.setDrawerLeft(value);
   }
 
   public logout() {
     const userModule = getModule(UserModule, this.$store);
-    
+
     userModule.logout()
-  } 
+  }
 }
 </script>

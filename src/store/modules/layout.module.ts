@@ -1,4 +1,5 @@
-import { VuexModule, Module, Mutation, Action } from 'vuex-module-decorators';
+import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
+import store from '@/store'
 
 import {
     TOGGLE_LEFT_DRAWER,
@@ -8,10 +9,11 @@ import {
 } from '@/types/store/mutations/layout.mutations';
 
 @Module({
-    namespaced: true,
+    dynamic: true,
     name: 'layout',
+    store: store,
 })
-export class LayoutModule extends VuexModule {
+class Layout extends VuexModule {
     public drawerLeftIsOpened: boolean = false;
     public drawerRightIsOpened: boolean = false;
 
@@ -55,3 +57,5 @@ export class LayoutModule extends VuexModule {
         this.context.commit(SET_DRAWER_RIGHT, value);
     }
 }
+
+export const LayoutModule = getModule(Layout);

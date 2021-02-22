@@ -3,7 +3,7 @@
     <v-card-title class="headline">
       New game VS computer
     </v-card-title>
-    
+
     <v-card-text>
       <div class="mt-0 mb-10">
         Set your new game choosing the level and which color you will play with.
@@ -21,7 +21,7 @@
         />
       </v-radio-group>
 
-      <v-radio-group  
+      <v-radio-group
         v-model="color"
         label="Choose your color :"
       >
@@ -36,7 +36,7 @@
 
     <v-card-actions>
       <v-spacer/>
-      
+
       <v-btn
         @click="cancel()"
         color="blue-grey darken-3"
@@ -62,11 +62,9 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import { namespace } from 'vuex-class';
 import { getModule } from 'vuex-module-decorators';
 import {
-  LayoutModule,
   BoardModule,
   StockfishModule,
 } from '@/store/modules';
-const layoutModule = namespace('layout');
 const boardModule = namespace('board');
 const stockfishModule = namespace('stockfish');
 

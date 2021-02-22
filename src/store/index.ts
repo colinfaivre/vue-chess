@@ -10,12 +10,12 @@ import {
 
 Vue.use(Vuex);
 
-export const store = new Vuex.Store({
-  modules: {
-    board: BoardModule,
-    stockfish: StockfishModule,
-    layout: LayoutModule,
-    user: UserModule,
-    snackbar: SnackbarModule,
-  }
+export default new Vuex.Store({
+  // modules: {
+  //   board: BoardModule,
+  //   stockfish: StockfishModule,
+  //   layout: LayoutModule,
+  //   user: UserModule,
+  //   snackbar: SnackbarModule,
+  // }
 });
