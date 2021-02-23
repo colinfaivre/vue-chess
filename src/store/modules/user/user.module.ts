@@ -3,6 +3,7 @@ import store from '@/store';
 import axios from 'axios';
 
 import {
+    IUserState,
     ISignupUserRequestParams,
     ISignupUserResponse,
     ILoginUserRequestParams,
@@ -16,7 +17,7 @@ import userMutations from '@/store/modules/user/user.mutations';
     name: 'user',
     store: store,
 })
-class User extends VuexModule {
+class User extends VuexModule implements IUserState{
     public user: IUser | null = null;
     public users: IUser[] = [];
 

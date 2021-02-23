@@ -1,3 +1,17 @@
+export interface IBoardState {
+    playerColor: string,
+    initialBoardSnapshot: string[],
+    board: ICell[][],
+    hasToPlay: string,
+    selectedPiece: IPiece | null,
+    round: number,
+    moves: string[],
+    moveStart: string | null,
+    moveEnd: string | null,
+    playerCapturedPieces: IPiece[],
+    computerCapturedPieces: IPiece[],
+}
+
 export interface ICell {
     color: string,
     piece: IPiece|null,

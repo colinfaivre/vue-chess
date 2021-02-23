@@ -4,6 +4,7 @@ import store from '@/store';
 
 const stockfishWorker = new Worker('stockfish.js/stockfish.js', {type: 'module'});
 
+import { IStockfishState } from '@/store/modules/stockfish/stockfish.d.ts';
 import stockfishMutations from '@/store/modules/stockfish/stockfish.mutations';
 
 @Module({
@@ -11,7 +12,7 @@ import stockfishMutations from '@/store/modules/stockfish/stockfish.mutations';
     name: 'stockfish',
     store: store,
 })
-class Stockfish extends VuexModule {
+class Stockfish extends VuexModule implements IStockfishState{
     public computerLevel: number = 1;
 
     @Mutation

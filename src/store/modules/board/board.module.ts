@@ -2,20 +2,13 @@ import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-dec
 import { StockfishModule } from '@/store/modules';
 import store from '@/store';
 
+import boardSnapshotParser from '@/data/boardSnapshotParser';
+import boardSerializer from '@/data/boardSerializer';
+
 import {
     getANCoords,
     getMoveFromAN,
 } from '@/helpers/stockfish';
-
-import {
-    ICell,
-    IPath,
-    ICellPosition,
-    IPiece,
-    IMove,
-} from '@/store/modules/board/board.d.ts';
-
-import boardMutations from '@/store/modules/board/board.mutations';
 
 import {
     BLACK_PAWN_MOVES,
@@ -27,15 +20,23 @@ import {
     QUEEN_MOVES,
 } from '@/data/piecesMoves';
 
-import boardSnapshotParser from '@/data/boardSnapshotParser';
-import boardSerializer from '@/data/boardSerializer';
+import {
+    IBoardState,
+    ICell,
+    IPath,
+    ICellPosition,
+    IPiece,
+    IMove,
+} from '@/store/modules/board/board.d.ts';
+
+import boardMutations from '@/store/modules/board/board.mutations';
 
 @Module({
     dynamic: true,
     name: 'board',
     store: store,
 })
-class Board extends VuexModule {
+class Board extends VuexModule implements IBoardState {
     public playerColor: string = 'white';
     public initialBoardSnapshot = [
         'rnbqkbnr',

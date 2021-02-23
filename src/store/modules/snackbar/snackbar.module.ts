@@ -3,6 +3,7 @@ import store from '@/store';
 
 import snackbarMutations from '@/store/modules/snackbar/snackbar.mutations';
 import {
+    ISnackbarState,
     ISnackbarDisplayParams,
 } from '@/store/modules/snackbar/snackbar.d.ts';
 
@@ -11,7 +12,7 @@ import {
     name: 'snackbar',
     store: store,
 })
-class Snackbar extends VuexModule {
+class Snackbar extends VuexModule implements ISnackbarState {
     public show: boolean = false;
     public message: string = '';
     public color: string = '';

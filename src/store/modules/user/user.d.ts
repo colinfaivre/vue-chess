@@ -1,3 +1,8 @@
+export interface IUserState {
+    user: IUser | null,
+    users: IUser[]
+}
+
 export interface ISignupUserRequestParams {
     email: string,
     password: string,

@@ -1,6 +1,7 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
 import store from '@/store';
 
+import { ILayoutState } from '@/store/modules/layout/layout.d.ts';
 import layoutMutations from '@/store/modules/layout/layout.mutations';
 
 @Module({
@@ -8,7 +9,7 @@ import layoutMutations from '@/store/modules/layout/layout.mutations';
     name: 'layout',
     store: store,
 })
-class Layout extends VuexModule {
+class Layout extends VuexModule implements ILayoutState {
     public drawerLeftIsOpened: boolean = false;
     public drawerRightIsOpened: boolean = false;
 
