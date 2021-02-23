@@ -116,12 +116,22 @@ class Board extends VuexModule implements IBoardState {
     }
 
     @Mutation
+    private [boardMutations.MARK_AS_POSSIBLE_DESTINATION](cellPosition: ICellPosition) {
+        this.board[cellPosition.columnIndex][cellPosition.rowIndex].possibleDestination = true;
+    }
+
+    @Mutation
     private [boardMutations.HIDE_POSSIBLE_DESTINATIONS]() {
         for (const row in this.board) {
             for (const column in this.board[row]) {
                 this.board[row][column].possibleDestination = false;
             }
         }
+    }
+
+    @Mutation
+    private [boardMutations.MARK_AS_POSSIBLE_KILL](cellPosition: ICellPosition) {
+        this.board[cellPosition.columnIndex][cellPosition.rowIndex].possibleKill = true;
     }
 
     @Mutation
@@ -196,16 +206,23 @@ class Board extends VuexModule implements IBoardState {
         this.round = 1;
     }
 
-    @Mutation
-    private [boardMutations.SHOW_POSSIBLE_MOVES](cellPosition: ICellPosition) {
-        const validateMove = (columnMove: number, rowMove: number): string|object|undefined => {
+    @Action({ rawError: true })
+    public showPossibleMoves(cellPosition: ICellPosition) {
+
+        const validateMove = (columnMove: number, rowMove: number): string | object | undefined => {
             if (destinationIsOnBoard(cellPosition, columnMove, rowMove)) {
                 const destinationCellIsFree = this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].piece === null;
                 if (destinationCellIsFree) {
-                    this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].possibleDestination = true;
+                    this.context.commit(boardMutations.MARK_AS_POSSIBLE_DESTINATION, {
+                        columnIndex: cellPosition.columnIndex + columnMove,
+                        rowIndex: cellPosition.rowIndex + rowMove,
+                    })
                 } else {
                     if (this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].piece?.color !== this.playerColor) {
-                        this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].possibleKill = true;
+                        this.context.commit(boardMutations.MARK_AS_POSSIBLE_KILL, {
+                            columnIndex: cellPosition.columnIndex + columnMove,
+                            rowIndex: cellPosition.rowIndex + rowMove,
+                        })
 
                         return 'stop';
                     }
@@ -218,45 +235,45 @@ class Board extends VuexModule implements IBoardState {
         if (this.selectedPiece) {
             switch (this.selectedPiece.type) {
                 case 'rook':
-                    for(const rookMoveSerie of ROOK_MOVES) {
+                    for (const rookMoveSerie of ROOK_MOVES) {
                         for (const rookMove of rookMoveSerie) {
-                            if(validateMove(...rookMove) === 'stop') {
+                            if (validateMove(...rookMove) === 'stop') {
                                 break;
                             }
                         }
                     }
                     break;
                 case 'knight':
-                    for(const knightMoveSerie of KNIGHT_MOVES) {
-                        for(const knightMove of knightMoveSerie) {
-                            if(validateMove(...knightMove) === 'stop') {
+                    for (const knightMoveSerie of KNIGHT_MOVES) {
+                        for (const knightMove of knightMoveSerie) {
+                            if (validateMove(...knightMove) === 'stop') {
                                 break;
                             }
                         }
                     }
                     break;
                 case 'bishop':
-                    for(const bishopMoveSerie of BISHOP_MOVES) {
-                        for(const bishopMove of bishopMoveSerie) {
-                            if(validateMove(...bishopMove) === 'stop') {
+                    for (const bishopMoveSerie of BISHOP_MOVES) {
+                        for (const bishopMove of bishopMoveSerie) {
+                            if (validateMove(...bishopMove) === 'stop') {
                                 break;
                             }
                         }
                     }
                     break;
                 case 'queen':
-                    for(const queenMoveSerie of QUEEN_MOVES) {
-                        for(const queenMove of queenMoveSerie) {
-                            if(validateMove(...queenMove) === 'stop') {
+                    for (const queenMoveSerie of QUEEN_MOVES) {
+                        for (const queenMove of queenMoveSerie) {
+                            if (validateMove(...queenMove) === 'stop') {
                                 break;
                             }
                         }
                     }
                     break;
                 case 'king':
-                    for(const kingMoveSerie of KING_MOVES) {
-                        for(const kingMove of kingMoveSerie) {
-                            if(validateMove(...kingMove) === 'stop') {
+                    for (const kingMoveSerie of KING_MOVES) {
+                        for (const kingMove of kingMoveSerie) {
+                            if (validateMove(...kingMove) === 'stop') {
                                 break;
                             }
                         }
@@ -302,7 +319,7 @@ class Board extends VuexModule implements IBoardState {
 
         if (this.hasToPlay === this.board[from.columnIndex][from.rowIndex].piece!.color) {
             this.context.commit(boardMutations.SELECT_PIECE, from);
-            this.context.commit(boardMutations.SHOW_POSSIBLE_MOVES, from);
+            this.showPossibleMoves(from);
         }
     }
 
