@@ -59,7 +59,7 @@ import {
 
 import {
   ISignupUserRequestParams,
-} from '@/types/store/user';
+} from '@/store/modules/user/user';
 
 @Component<SignupForm>({})
 export default class SignupForm extends Vue {

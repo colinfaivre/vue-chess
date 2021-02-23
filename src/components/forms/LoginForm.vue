@@ -60,7 +60,7 @@ import {
 
 import {
   ILoginUserRequestParams,
-} from '@/types/store/user';
+} from '@/store/modules/user/user';
 
 @Component<LoginForm>({})
 export default class LoginForm extends Vue {

@@ -16,7 +16,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { BoardModule } from '@/store/modules';
-import { ICellPosition } from "@/types";
+import { ICellPosition } from "@/store/modules/board/board";
 
 @Component<Piece>({
   components: {},

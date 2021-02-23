@@ -47,7 +47,7 @@ import {
     ICell,
     ICellPosition,
     IPiece,
-} from '@/types';
+} from '@/store/modules/board/board';
 
 import Piece from "@/components/Piece.vue";
 import CapturedPiecesArea from "@/components/CapturedPiecesArea.vue";
