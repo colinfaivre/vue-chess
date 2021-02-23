@@ -1,7 +1,7 @@
 import {
     ICell,
     IPiece,
-} from '@/types';
+} from '@/store/modules/board/board';
 
 // adaptToAnCoords() :
 // Adapt board snapshot data structure (array of strings) to

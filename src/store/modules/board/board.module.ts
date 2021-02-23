@@ -8,6 +8,7 @@ import boardSerializer from '@/data/boardSerializer';
 import {
     getANCoords,
     getMoveFromAN,
+    destinationIsOnBoard,
 } from '@/helpers/stockfish';
 
 import {
@@ -57,6 +58,28 @@ class Board extends VuexModule implements IBoardState {
     public moveEnd: string|null = null;
     public playerCapturedPieces: IPiece[] = [];
     public computerCapturedPieces: IPiece[] = [];
+
+    get boardPieces() {
+        let pieces: IPiece[] = [];
+
+        for (const column in this.board) {
+            for (const row in this.board[column]) {
+                if (this.board[column][row].piece !== null) {
+                    pieces.push(this.board[column][row].piece!);
+                }
+            }
+        }
+
+        return pieces;
+    }
+
+    get whiteBoardPieces() {
+        return this.boardPieces.filter(piece => piece.color === 'white');
+    }
+
+    get blackBoardPieces() {
+        return this.boardPieces.filter(piece => piece.color === 'black');
+    }
 
     get selectedPiecePosition() {
         for (const column in this.board) {
@@ -176,12 +199,7 @@ class Board extends VuexModule implements IBoardState {
     @Mutation
     private [boardMutations.SHOW_POSSIBLE_MOVES](cellPosition: ICellPosition) {
         const validateMove = (columnMove: number, rowMove: number): string|object|undefined => {
-            // Check if move is not out of board
-            const destinationCellIsInRow = cellPosition.rowIndex + rowMove >= 0 && cellPosition.rowIndex + rowMove <= 7;
-            const destinationCellIsInColumn = cellPosition.columnIndex + columnMove >= 0 && cellPosition.columnIndex + columnMove <= 7;
-            const destinationIsOnBoard = destinationCellIsInColumn && destinationCellIsInRow;
-
-            if (destinationIsOnBoard) {
+            if (destinationIsOnBoard(cellPosition, columnMove, rowMove)) {
                 const destinationCellIsFree = this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].piece === null;
                 if (destinationCellIsFree) {
                     this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].possibleDestination = true;
