@@ -33,10 +33,3 @@ export function getMoveFromAN(anMove: string): IMove {
         endPosition,
     }
 }
-
-export function destinationIsOnBoard(cellPosition: ICellPosition, columnMove: number, rowMove: number): boolean {
-    const destinationCellIsInRow = cellPosition.rowIndex + rowMove >= 0 && cellPosition.rowIndex + rowMove <= 7;
-    const destinationCellIsInColumn = cellPosition.columnIndex + columnMove >= 0 && cellPosition.columnIndex + columnMove <= 7;
-    const result = destinationCellIsInColumn && destinationCellIsInRow;
-    return result;
-}

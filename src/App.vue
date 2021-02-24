@@ -8,7 +8,6 @@
 
     <v-main class="main">
       <board-container/>
-      {{ whiteBoardPieces }}
     </v-main>
 
     <the-footer/>
@@ -38,7 +37,6 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import {SnackbarModule} from '@/store/modules';
-import {BoardModule} from '@/store/modules';
 
 import BoardContainer from './components/BoardContainer.vue';
 import TheDrawerLeft from "@/components/layout/TheDrawerLeft.vue";
@@ -56,10 +54,6 @@ import TheFooter from '@/components/layout/TheFooter.vue';
   },
 })
 export default class App extends Vue {
-  get whiteBoardPieces() {
-    return BoardModule.whiteBoardPieces;
-  }
-
   get showSnackbarGetter() {
     return SnackbarModule.showSnackbar;
   }

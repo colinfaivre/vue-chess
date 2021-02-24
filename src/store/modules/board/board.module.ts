@@ -8,18 +8,8 @@ import boardSerializer from '@/data/boardSerializer';
 import {
     getANCoords,
     getMoveFromAN,
-    destinationIsOnBoard,
 } from '@/helpers/stockfish';
-
-import {
-    BLACK_PAWN_MOVES,
-    WHITE_PAWN_MOVES,
-    KNIGHT_MOVES,
-    KING_MOVES,
-    BISHOP_MOVES,
-    ROOK_MOVES,
-    QUEEN_MOVES,
-} from '@/data/piecesMoves';
+import { getPossibleDestinations } from '@/helpers/getPossibleDestinations';
 
 import {
     IBoardState,
@@ -208,106 +198,24 @@ class Board extends VuexModule implements IBoardState {
 
     @Action({ rawError: true })
     public showPossibleMoves(cellPosition: ICellPosition) {
+        const possibleDestinations = getPossibleDestinations(this.board, cellPosition, this.playerColor, this.selectedPiece.type, this.hasToPlay);
 
-        const validateMove = (columnMove: number, rowMove: number): string | object | undefined => {
-            if (destinationIsOnBoard(cellPosition, columnMove, rowMove)) {
-                const destinationCellIsFree = this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].piece === null;
-                if (destinationCellIsFree) {
-                    this.context.commit(boardMutations.MARK_AS_POSSIBLE_DESTINATION, {
-                        columnIndex: cellPosition.columnIndex + columnMove,
-                        rowIndex: cellPosition.rowIndex + rowMove,
-                    })
-                } else {
-                    if (this.board[cellPosition.columnIndex + columnMove][cellPosition.rowIndex + rowMove].piece?.color !== this.playerColor) {
-                        this.context.commit(boardMutations.MARK_AS_POSSIBLE_KILL, {
-                            columnIndex: cellPosition.columnIndex + columnMove,
-                            rowIndex: cellPosition.rowIndex + rowMove,
-                        })
-
-                        return 'stop';
-                    }
-                    // Stop seaching for new destinations as the previous was taken by a black or white piece
-                    return 'stop';
-                }
-            }
+        if (possibleDestinations.normal.length !== 0) {
+            possibleDestinations.normal.map(destination => {
+                this.context.commit(boardMutations.MARK_AS_POSSIBLE_DESTINATION, {
+                    columnIndex: destination.columnIndex,
+                    rowIndex: destination.rowIndex,
+                })
+            })
         }
 
-        if (this.selectedPiece) {
-            switch (this.selectedPiece.type) {
-                case 'rook':
-                    for (const rookMoveSerie of ROOK_MOVES) {
-                        for (const rookMove of rookMoveSerie) {
-                            if (validateMove(...rookMove) === 'stop') {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case 'knight':
-                    for (const knightMoveSerie of KNIGHT_MOVES) {
-                        for (const knightMove of knightMoveSerie) {
-                            if (validateMove(...knightMove) === 'stop') {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case 'bishop':
-                    for (const bishopMoveSerie of BISHOP_MOVES) {
-                        for (const bishopMove of bishopMoveSerie) {
-                            if (validateMove(...bishopMove) === 'stop') {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case 'queen':
-                    for (const queenMoveSerie of QUEEN_MOVES) {
-                        for (const queenMove of queenMoveSerie) {
-                            if (validateMove(...queenMove) === 'stop') {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case 'king':
-                    for (const kingMoveSerie of KING_MOVES) {
-                        for (const kingMove of kingMoveSerie) {
-                            if (validateMove(...kingMove) === 'stop') {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case 'pawn':
-                    if (this.hasToPlay === 'white') {
-                        // White pawn moves by one cell forward
-                        if (this.board[cellPosition.columnIndex][cellPosition.rowIndex + 1].piece === null) {
-                            this.board[cellPosition.columnIndex][cellPosition.rowIndex + 1].possibleDestination = true;
-                        }
-                        // White pawn moves by two cells forward
-                        if (cellPosition.rowIndex === 1 && this.board[cellPosition.columnIndex][cellPosition.rowIndex + 2].piece === null) {
-                            this.board[cellPosition.columnIndex][cellPosition.rowIndex + 2].possibleDestination = true;
-                        }
-                        // White pawn takes opponent on right/forward diagonal
-                        if (this.board[cellPosition.columnIndex + 1][cellPosition.rowIndex + 1].piece !== null && this.board[cellPosition.columnIndex + 1][cellPosition.rowIndex + 1].piece?.color !== this.hasToPlay) {
-                            this.board[cellPosition.columnIndex + 1][cellPosition.rowIndex + 1].possibleKill = true;
-                        }
-                        // White pawn takes opponent on left/forward diagonal
-                        if (this.board[cellPosition.columnIndex - 1][cellPosition.rowIndex + 1].piece !== null && this.board[cellPosition.columnIndex - 1][cellPosition.rowIndex + 1].piece?.color !== this.hasToPlay) {
-                            this.board[cellPosition.columnIndex - 1][cellPosition.rowIndex + 1].possibleKill = true;
-                        }
-                    } else {
-                        if (this.board[cellPosition.columnIndex][cellPosition.rowIndex - 1].piece === null) {
-                            this.board[cellPosition.columnIndex][cellPosition.rowIndex - 1].possibleDestination = true;
-                        }
-
-                        if (cellPosition.rowIndex === 6 && this.board[cellPosition.columnIndex][cellPosition.rowIndex - 2].piece === null) {
-                            this.board[cellPosition.columnIndex][cellPosition.rowIndex - 2].possibleDestination = true;
-                        }
-                    }
-                    break;
-            }
+        if (possibleDestinations.kills.length !== 0) {
+            possibleDestinations.kills.map(destination => {
+                this.context.commit(boardMutations.MARK_AS_POSSIBLE_KILL, {
+                    columnIndex: destination.columnIndex,
+                    rowIndex: destination.rowIndex,
+                })
+            })
         }
     }
 
