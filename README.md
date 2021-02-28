@@ -1,4 +1,5 @@
 # vue-chess
+![alt text](./public/img/app_screenshot.png?raw=true)
 
 ## Project setup
 ```
