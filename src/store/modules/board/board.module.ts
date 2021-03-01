@@ -55,7 +55,13 @@ class Board extends VuexModule implements IBoardState {
         for (const column in this.board) {
             for (const row in this.board[column]) {
                 if (this.board[column][row].piece !== null) {
-                    pieces.push(this.board[column][row].piece!);
+                    const piece = {
+                        ...this.board[column][row].piece!,
+                        rowIndex: parseInt(row),
+                        columnIndex: parseInt(column),
+                    }
+
+                    pieces.push(piece);
                 }
             }
         }
@@ -75,6 +81,7 @@ class Board extends VuexModule implements IBoardState {
         for (const column in this.board) {
             for (const row in this.board[column]) {
                 if (this.board[column][row].piece !== null && this.board[column][row].piece!.selected === true) {
+                    console.log("playerKingPosition", this.playerKingPosition);
                     return {
                         columnIndex: parseInt(column),
                         rowIndex: parseInt(row)
@@ -92,6 +99,61 @@ class Board extends VuexModule implements IBoardState {
         }
 
         return movesString;
+    }
+
+    get playerKingPosition(): ICellPosition {
+        const kingPiece = this.whiteBoardPieces.filter(piece => piece.type === 'king');
+
+        return {
+            columnIndex: parseInt(kingPiece[0].columnIndex),
+            rowIndex: parseInt(kingPiece[0].rowIndex),
+        }
+    }
+
+    get opponentKingPosition(): ICellPosition {
+        const kingPiece = this.blackBoardPieces.filter(piece => piece.type === 'king');
+
+        return {
+            columnIndex: parseInt(kingPiece[0].columnIndex),
+            rowIndex: parseInt(kingPiece[0].rowIndex),
+        }
+    }
+
+    get isPlayerKingChecked() {
+        let check = false;
+
+        for (const opponentPiece of this.blackBoardPieces) {
+            const possibleDestinations = getPossibleDestinations(this.board, {
+                columnIndex: opponentPiece.columnIndex,
+                rowIndex: opponentPiece.rowIndex,
+            })
+
+            if (possibleDestinations.kills.length !== 0) {
+                check = possibleDestinations.kills.some(kill => kill.columnIndex == this.playerKingPosition.columnIndex && kill.rowIndex == this.playerKingPosition.rowIndex);
+            }
+        }
+
+        return check;
+    }
+
+    get isOpponentKingChecked() {
+        let check = false;
+
+        for (const playerPiece of this.whiteBoardPieces) {
+            const possibleDestinations = getPossibleDestinations(this.board, {
+                columnIndex: playerPiece.columnIndex,
+                rowIndex: playerPiece.rowIndex,
+            })
+
+            if (possibleDestinations.kills.length !== 0) {
+                // @todo push a check in checks array
+                check = possibleDestinations.kills.some(kill => kill.columnIndex == this.opponentKingPosition.columnIndex && kill.rowIndex == this.opponentKingPosition.rowIndex);
+            }
+        }
+
+        console.warn("CHEEEECK", check)
+
+        return check;
     }
 
     @Mutation
@@ -198,7 +260,7 @@ class Board extends VuexModule implements IBoardState {
 
     @Action({ rawError: true })
     public showPossibleMoves(cellPosition: ICellPosition) {
-        const possibleDestinations = getPossibleDestinations(this.board, cellPosition, this.playerColor, this.selectedPiece.type, this.hasToPlay);
+        const possibleDestinations = getPossibleDestinations(this.board, cellPosition);
 
         if (possibleDestinations.normal.length !== 0) {
             possibleDestinations.normal.map(destination => {

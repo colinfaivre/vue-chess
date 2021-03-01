@@ -14,7 +14,10 @@ import {
     IMove,
 } from '@/store/modules/board/board';
 
-export function getPossibleDestinations(board: ICell[][], fromCell: ICellPosition, playerColor: string, pieceType: string, hasToPlay: string) {
+export function getPossibleDestinations(board: ICell[][], fromCell: ICellPosition) {
+    const pieceType = board[fromCell.columnIndex][fromCell.rowIndex].piece?.type;
+    const pieceColor = board[fromCell.columnIndex][fromCell.rowIndex].piece?.color;
+
     let possibleDestinations: ICellPosition[] = [];
 
     if (pieceType === 'knight') {
@@ -76,31 +79,68 @@ export function getPossibleDestinations(board: ICell[][], fromCell: ICellPositio
     }
 
     if (pieceType === 'pawn') {
-        if (hasToPlay === 'white') {
+        if (pieceColor === 'white') {
             // White pawn moves by one cell forward
             if (board[fromCell.columnIndex][fromCell.rowIndex + 1].piece === null) {
-                board[fromCell.columnIndex][fromCell.rowIndex + 1].possibleDestination = true;
+                // board[fromCell.columnIndex][fromCell.rowIndex + 1].possibleDestination = true;
+                possibleDestinations.push({
+                    kill: false,
+                    columnIndex: fromCell.columnIndex,
+                    rowIndex: fromCell.rowIndex + 1,
+                })
             }
             // White pawn moves by two cells forward
             if (fromCell.rowIndex === 1 && board[fromCell.columnIndex][fromCell.rowIndex + 2].piece === null) {
-                board[fromCell.columnIndex][fromCell.rowIndex + 2].possibleDestination = true;
+                // board[fromCell.columnIndex][fromCell.rowIndex + 2].possibleDestination = true;
+                possibleDestinations.push({
+                    kill: false,
+                    columnIndex: fromCell.columnIndex,
+                    rowIndex: fromCell.rowIndex + 2,
+                })
             }
             // White pawn takes opponent on right/forward diagonal
-            if (board[fromCell.columnIndex + 1][fromCell.rowIndex + 1].piece !== null && board[fromCell.columnIndex + 1][fromCell.rowIndex + 1].piece?.color !== hasToPlay) {
-                board[fromCell.columnIndex + 1][fromCell.rowIndex + 1].possibleKill = true;
+            if (destinationColumnIsOnBoard(fromCell.columnIndex + 1) && board[fromCell.columnIndex + 1][fromCell.rowIndex + 1].piece !== null && board[fromCell.columnIndex + 1][fromCell.rowIndex + 1].piece?.color !== pieceColor) {
+                // board[fromCell.columnIndex + 1][fromCell.rowIndex + 1].possibleKill = true;
+                possibleDestinations.push({
+                    kill: true,
+                    columnIndex: fromCell.columnIndex + 1,
+                    rowIndex: fromCell.rowIndex + 1,
+                })
             }
             // White pawn takes opponent on left/forward diagonal
-            if (board[fromCell.columnIndex - 1][fromCell.rowIndex + 1].piece !== null && board[fromCell.columnIndex - 1][fromCell.rowIndex + 1].piece?.color !== hasToPlay) {
-                board[fromCell.columnIndex - 1][fromCell.rowIndex + 1].possibleKill = true;
+            if (destinationColumnIsOnBoard(fromCell.columnIndex - 1) && board[fromCell.columnIndex - 1][fromCell.rowIndex + 1].piece !== null && board[fromCell.columnIndex - 1][fromCell.rowIndex + 1].piece?.color !== pieceColor) {
+                // board[fromCell.columnIndex - 1][fromCell.rowIndex + 1].possibleKill = true;
+                possibleDestinations.push({
+                    kill: true,
+                    columnIndex: fromCell.columnIndex - 1,
+                    rowIndex: fromCell.rowIndex + 1,
+                })
             }
-        } else {
-            if (board[fromCell.columnIndex][fromCell.rowIndex - 1].piece === null) {
-                board[fromCell.columnIndex][fromCell.rowIndex - 1].possibleDestination = true;
-            }
+        }
 
-            if (fromCell.rowIndex === 6 && board[fromCell.columnIndex][fromCell.rowIndex - 2].piece === null) {
-                board[fromCell.columnIndex][fromCell.rowIndex - 2].possibleDestination = true;
+        if (pieceColor === 'black') {
+            // Black pawn takes opponent on right/forward diagonal
+            if (destinationColumnIsOnBoard(fromCell.columnIndex - 1) && board[fromCell.columnIndex - 1][fromCell.rowIndex - 1].piece !== null && board[fromCell.columnIndex - 1][fromCell.rowIndex - 1].piece?.color !== pieceColor) {
+                // board[fromCell.columnIndex - 1][fromCell.rowIndex - 1].possibleKill = true;
+                possibleDestinations.push({
+                    kill: true,
+                    columnIndex: fromCell.columnIndex - 1,
+                    rowIndex: fromCell.rowIndex - 1,
+                })
             }
+            // Black pawn takes opponent on left/forward diagonal
+            if (destinationColumnIsOnBoard(fromCell.columnIndex + 1) && board[fromCell.columnIndex + 1][fromCell.rowIndex - 1].piece !== null && board[fromCell.columnIndex + 1][fromCell.rowIndex - 1].piece?.color !== pieceColor) {
+                // board[fromCell.columnIndex + 1][fromCell.rowIndex - 1].possibleKill = true;
+                possibleDestinations.push({
+                    kill: true,
+                    columnIndex: fromCell.columnIndex + 1,
+                    rowIndex: fromCell.rowIndex - 1,
+                })
+            }
+        }
+
+        function destinationColumnIsOnBoard(position: number) {
+            return position >= 0 && position < 7;
         }
     }
 
@@ -130,7 +170,7 @@ export function getPossibleDestinations(board: ICell[][], fromCell: ICellPositio
         return null;
 
         function destinationIsOpponent(): boolean {
-            return board[fromCell.columnIndex + columnMove][fromCell.rowIndex + rowMove].piece?.color !== playerColor;
+            return board[fromCell.columnIndex + columnMove][fromCell.rowIndex + rowMove].piece?.color !== board[fromCell.columnIndex][fromCell.rowIndex].piece?.color;
         }
         function destinationIsFree(): boolean {
             return board[fromCell.columnIndex + columnMove][fromCell.rowIndex + rowMove].piece === null;

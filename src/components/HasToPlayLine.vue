@@ -1,8 +1,7 @@
 <template>
   <div
     v-if="hasToPlay === color"
-    class="has-to-play"
-    :class="`has-to-play--${color}`"
+    :class="lineClasses"
   />
 </template>
 
@@ -10,8 +9,8 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 import { BoardModule } from '@/store/modules';
 
-@Component<BoardContainer>({})
-export default class BoardContainer extends Vue {
+@Component<HasToPlayLine>({})
+export default class HasToPlayLine extends Vue {
   get hasToPlay() {
     return BoardModule.hasToPlay;
   }
@@ -20,7 +19,29 @@ export default class BoardContainer extends Vue {
       type: String,
       required: true,
   })
-  public color!: String;
+  public color!: string;
+
+  @Prop({
+    type: Boolean,
+    required: false,
+  })
+  public isChecked!: boolean;
+
+  @Prop({
+    type: Boolean,
+    required: false,
+  })
+  public isCheckMated!: boolean;
+
+  get lineClasses() {
+    return {
+      'has-to-play': true,
+      'has-to-play--white': this.color === 'white',
+      'has-to-play--black': this.color === 'black',
+      'has-to-play--checked': this.isChecked,
+      'has-to-play--checkmated': this.isCheckMated,
+    }
+  }
 }
 </script>
 
@@ -41,6 +62,14 @@ export default class BoardContainer extends Vue {
 
   &--white {
     bottom: -5px;
+  }
+
+  &--checked {
+    background-color: orange;
+  }
+
+  &--checkmated {
+    background-color: red;
   }
 }
 </style>
