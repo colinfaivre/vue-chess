@@ -8,15 +8,15 @@
     >
       <v-list dense>
         <v-list-item link>
-          Computer level : {{computerLevel}}
+          {{ $t('gameInfos.level') }} : {{computerLevel}}
         </v-list-item>
 
         <v-list-item link>
-          Round {{round}}
+          {{ $t('gameInfos.round') }} {{round}}
         </v-list-item>
 
         <v-list-item link>
-          {{playerHasToPlay}}
+          {{playerHasToPlay}} {{ $t('gameInfos.toPlay') }}
         </v-list-item>
       </v-list>
 
@@ -62,7 +62,7 @@ export default class TheDrawerRight extends Vue {
   }
 
   get playerHasToPlay() {
-    return this.hasToPlay === 'white' ? 'White to play' : 'Black to play';
+    return this.hasToPlay === 'white' ? 'White' : 'Black';
   }
 
   get opened() {

@@ -31,7 +31,7 @@
 
           <v-list-item-content>
             <v-list-item-title>
-              Sign up
+              {{ $t('options.signup') }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -49,7 +49,7 @@
 
           <v-list-item-content>
             <v-list-item-title>
-              Log in
+              {{ $t('options.login') }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -67,7 +67,7 @@
 
           <v-list-item-content>
             <v-list-item-title>
-              Log out
+              {{ $t('options.logout') }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -104,7 +104,7 @@
 
           <v-list-item-content>
             <v-list-item-title>
-              New game VS computer
+              {{ $t('options.newComputerGame') }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -121,7 +121,7 @@
 
           <v-list-item-content>
             <v-list-item-title>
-              New game VS human
+              {{ $t('options.newHumanGame') }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -135,7 +135,7 @@
 
           <v-list-item-content>
             <v-list-item-title>
-              Settings
+              {{ $t('options.settings') }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>

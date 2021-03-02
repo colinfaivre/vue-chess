@@ -4,6 +4,7 @@ import './registerServiceWorker'
 import router from '@/router'
 import store from '@/store';
 import vuetify from './plugins/vuetify';
+import i18n from '@/lang/index.ts';
 
 Vue.config.productionTip = false
 
@@ -11,6 +12,7 @@ new Vue({
   router,
   store,
   vuetify,
+  i18n,
   created() {
     const user = localStorage.getItem('user');
     if (user) {
