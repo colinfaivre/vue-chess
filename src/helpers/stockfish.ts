@@ -24,12 +24,34 @@ export function getNormalCoords(anCoords: string): ICellPosition {
 }
 
 // Converts an algebric notation move into an IMove
-export function getMoveFromAN(anMove: string): IMove {
-    const startPosition = getNormalCoords(anMove.substr(0, 2));
-    const endPosition = getNormalCoords(anMove.substr(2, 2));
+export function getMoveFromAN(anMove: string): IMove[] {
+    const castlingMoves: { [index: string]: string } = {
+        e8g8: 'h8f8',
+        e8c8: 'a8d8',
+        e1g1: 'h1f1',
+        e1c1: 'a1d1',
+    }
+    const isCastlingMove = () => anMove in castlingMoves;
 
-    return {
-        startPosition,
-        endPosition,
+    return isCastlingMove() ? handleCastlingMove(anMove) : handleNormalMove()
+
+    function handleCastlingMove(anKingMove: string): IMove[] {
+        const kingMove = {
+            startPosition: getNormalCoords(anKingMove.substr(0, 2)),
+            endPosition: getNormalCoords(anKingMove.substr(2, 2)),
+        }
+        const rookMove = {
+            startPosition: getNormalCoords(castlingMoves[anKingMove].substr(0, 2)),
+            endPosition: getNormalCoords(castlingMoves[anKingMove].substr(2, 2)),
+        };
+        return [kingMove, rookMove];
+    }
+
+    function handleNormalMove() {
+        const move = {
+            startPosition: getNormalCoords(anMove.substr(0, 2)),
+            endPosition: getNormalCoords(anMove.substr(2, 2)),
+        }
+        return [move];
     }
 }

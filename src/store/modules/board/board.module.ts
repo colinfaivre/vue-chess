@@ -301,19 +301,18 @@ class Board extends VuexModule implements IBoardState {
     }
 
     @Action({ rawError: true })
-    public move(move: IMove) {
-        // MOVE PIECE
-        console.log('startPosition', move.startPosition);
-        console.log('endPosition', move.endPosition);
-
-        this.context.commit(boardMutations.ADD_MOVE, {startPosition: move.startPosition, endPosition: move.endPosition});
-        this.context.commit(boardMutations.ADD_PIECE, {from: move.startPosition, to: move.endPosition});
-        this.context.commit(boardMutations.REMOVE_PIECE_FROM, move.startPosition);
+    public move(moves: IMove[]) {
+        // Takes moves as an array to be able to handle two moves at the same time for stockfish castling
+        for (let move of moves) {
+            this.context.commit(boardMutations.ADD_MOVE, {startPosition: move.startPosition, endPosition: move.endPosition});
+            this.context.commit(boardMutations.ADD_PIECE, {from: move.startPosition, to: move.endPosition});
+            this.context.commit(boardMutations.REMOVE_PIECE_FROM, move.startPosition);
+        }
     }
 
     @Action({ rawError: true })
     public selectDestination(endPosition: ICellPosition) {
-        this.move({startPosition: this.selectedPiecePosition, endPosition});
+        this.move([{startPosition: this.selectedPiecePosition, endPosition}]);
 
         // CLEAR BOARD
         this.context.commit(boardMutations.UNSELECT_ALL_PIECES);
