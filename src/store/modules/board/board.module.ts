@@ -129,7 +129,12 @@ class Board extends VuexModule implements IBoardState {
             })
 
             if (possibleDestinations.kills.length !== 0) {
-                check = possibleDestinations.kills.some(kill => kill.columnIndex == this.playerKingPosition.columnIndex && kill.rowIndex == this.playerKingPosition.rowIndex);
+                // check = possibleDestinations.kills.some(kill => kill.columnIndex == this.playerKingPosition.columnIndex && kill.rowIndex == this.playerKingPosition.rowIndex);
+                for (const kill of possibleDestinations.kills) {
+                    if (kill.columnIndex == this.playerKingPosition.columnIndex && kill.rowIndex == this.playerKingPosition.rowIndex) {
+                        check = true;
+                    }
+                }
             }
         }
 
@@ -146,12 +151,14 @@ class Board extends VuexModule implements IBoardState {
             })
 
             if (possibleDestinations.kills.length !== 0) {
-                // @todo push a check in checks array
-                check = possibleDestinations.kills.some(kill => kill.columnIndex == this.opponentKingPosition.columnIndex && kill.rowIndex == this.opponentKingPosition.rowIndex);
+                // check = possibleDestinations.kills.some(kill => kill.columnIndex == this.opponentKingPosition.columnIndex && kill.rowIndex == this.opponentKingPosition.rowIndex);
+                for (const kill of possibleDestinations.kills) {
+                    if (kill.columnIndex == this.opponentKingPosition.columnIndex && kill.rowIndex == this.opponentKingPosition.rowIndex) {
+                        check = true;
+                    }
+                }
             }
         }
-
-        console.warn("CHEEEECK", check)
 
         return check;
     }
