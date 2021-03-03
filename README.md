@@ -1,6 +1,9 @@
 # vue-chess
 ![alt text](./public/img/app_screenshot.png?raw=true)
 
+## Project management
+See [Trello board](https://trello.com/b/R1At1hox/vue-chess).
+
 ## Project setup
 ```
 yarn install
