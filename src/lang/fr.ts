@@ -10,6 +10,7 @@ export default {
     gameInfos: {
         level: 'Niveau de jeu',
         round: 'Tour',
-        toPlay: 'trait aux',
+        whiteToPlay: 'Trait aux blancs',
+        blackToPlay: 'Trait aux noirs',
     }
 }

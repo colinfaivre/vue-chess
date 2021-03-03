@@ -10,6 +10,7 @@ export default {
     gameInfos: {
         level: 'Computer level',
         round: 'Round',
-        toPlay: 'to play',
+        whiteToPlay: 'White to play',
+        blackToPlay: 'Black to play',
     }
 }

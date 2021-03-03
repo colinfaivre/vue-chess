@@ -16,7 +16,8 @@
         </v-list-item>
 
         <v-list-item link>
-          {{playerHasToPlay}} {{ $t('gameInfos.toPlay') }}
+          <span v-if="hasToPlay === 'black'">{{ $t('gameInfos.blackToPlay') }}</span>
+          <span v-if="hasToPlay === 'white'">{{ $t('gameInfos.whiteToPlay') }}</span>
         </v-list-item>
       </v-list>
 
@@ -59,10 +60,6 @@ export default class TheDrawerRight extends Vue {
 
   get moves() {
     return BoardModule.moves;
-  }
-
-  get playerHasToPlay() {
-    return this.hasToPlay === 'white' ? 'White' : 'Black';
   }
 
   get opened() {
