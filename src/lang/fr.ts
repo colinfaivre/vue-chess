@@ -10,6 +10,8 @@ export default {
     gameInfos: {
         level: 'Niveau de jeu',
         round: 'Tour',
+        kingSideCastling: 'Petit roque',
+        queenSideCastling: 'Grand roque',
         whiteToPlay: 'Trait aux blancs',
         blackToPlay: 'Trait aux noirs',
     }

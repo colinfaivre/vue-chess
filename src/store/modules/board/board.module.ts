@@ -48,6 +48,8 @@ class Board extends VuexModule implements IBoardState {
     public moveEnd: string|null = null;
     public playerCapturedPieces: IPiece[] = [];
     public computerCapturedPieces: IPiece[] = [];
+    public isPlayerKingSideCastlingPossible = true;
+    public isPlayerQueenSideCastlingPossible = true;
 
     get boardPieces() {
         let pieces: IPiece[] = [];
@@ -81,7 +83,6 @@ class Board extends VuexModule implements IBoardState {
         for (const column in this.board) {
             for (const row in this.board[column]) {
                 if (this.board[column][row].piece !== null && this.board[column][row].piece!.selected === true) {
-                    console.log("playerKingPosition", this.playerKingPosition);
                     return {
                         columnIndex: parseInt(column),
                         rowIndex: parseInt(row)
@@ -265,6 +266,16 @@ class Board extends VuexModule implements IBoardState {
         this.round = 1;
     }
 
+    @Mutation
+    private [boardMutations.DISABLE_PLAYER_KING_SIDE_CASTLING] () {
+        this.isPlayerKingSideCastlingPossible = false;
+    }
+
+    @Mutation
+    private [boardMutations.DISABLE_PLAYER_QUEEN_SIDE_CASTLING]() {
+        this.isPlayerQueenSideCastlingPossible = false;
+    }
+
     @Action({ rawError: true })
     public showPossibleMoves(cellPosition: ICellPosition) {
         const possibleDestinations = getPossibleDestinations(this.board, cellPosition);
@@ -307,6 +318,23 @@ class Board extends VuexModule implements IBoardState {
             this.context.commit(boardMutations.ADD_MOVE, {startPosition: move.startPosition, endPosition: move.endPosition});
             this.context.commit(boardMutations.ADD_PIECE, {from: move.startPosition, to: move.endPosition});
             this.context.commit(boardMutations.REMOVE_PIECE_FROM, move.startPosition);
+
+            if (this.selectedPiece) {
+                // Disable castling after a king move
+                if (this.selectedPiece.type === 'king' && this.selectedPiece.color === 'white') {
+                    this.context.commit(boardMutations.DISABLE_PLAYER_KING_SIDE_CASTLING);
+                    this.context.commit(boardMutations.DISABLE_PLAYER_QUEEN_SIDE_CASTLING);
+                }
+                // handle rooks have moved
+                if (this.selectedPiece.type === 'rook' && this.selectedPiece.color === 'white') {
+                    if (move.startPosition.columnIndex === 0 && move.startPosition.rowIndex === 0) {
+                        this.context.commit(boardMutations.DISABLE_PLAYER_QUEEN_SIDE_CASTLING);
+                    }
+                    if (move.startPosition.columnIndex === 7 && move.startPosition.rowIndex === 0) {
+                        this.context.commit(boardMutations.DISABLE_PLAYER_KING_SIDE_CASTLING);
+                    }
+                }
+            }
         }
     }
 
@@ -318,7 +346,7 @@ class Board extends VuexModule implements IBoardState {
         this.context.commit(boardMutations.UNSELECT_ALL_PIECES);
         this.context.commit(boardMutations.HIDE_POSSIBLE_DESTINATIONS);
         this.context.commit(boardMutations.HIDE_POSSIBLE_KILLS);
-
+        // PREPARE NEXT ROUND
         this.context.commit(boardMutations.INCREMENT_ROUND);
         this.context.commit(boardMutations.TOGGLE_PLAYER);
 

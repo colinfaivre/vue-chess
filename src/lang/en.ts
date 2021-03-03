@@ -10,6 +10,8 @@ export default {
     gameInfos: {
         level: 'Computer level',
         round: 'Round',
+        kingSideCastling: 'Kingside castling',
+        queenSideCastling: 'Queenside castling',
         whiteToPlay: 'White to play',
         blackToPlay: 'Black to play',
     }

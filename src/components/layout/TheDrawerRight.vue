@@ -15,6 +15,20 @@
           {{ $t('gameInfos.round') }} {{round}}
         </v-list-item>
 
+        <v-list-item
+          :disabled="!isPlayerKingSideCastlingPossible"
+          link
+        >
+          {{ $t('gameInfos.kingSideCastling') }}
+        </v-list-item>
+
+        <v-list-item
+          :disabled="!isPlayerQueenSideCastlingPossible"
+          link
+        >
+          {{ $t('gameInfos.queenSideCastling') }}
+        </v-list-item>
+
         <v-list-item link>
           <span v-if="hasToPlay === 'black'">{{ $t('gameInfos.blackToPlay') }}</span>
           <span v-if="hasToPlay === 'white'">{{ $t('gameInfos.whiteToPlay') }}</span>
@@ -60,6 +74,14 @@ export default class TheDrawerRight extends Vue {
 
   get moves() {
     return BoardModule.moves;
+  }
+
+  get isPlayerKingSideCastlingPossible() {
+    return BoardModule.isPlayerKingSideCastlingPossible
+  }
+
+  get isPlayerQueenSideCastlingPossible() {
+    return BoardModule.isPlayerQueenSideCastlingPossible
   }
 
   get opened() {
