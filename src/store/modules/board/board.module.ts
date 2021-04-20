@@ -1,16 +1,12 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
 import { StockfishModule } from '@/store/modules';
 import store from '@/store';
-
 import boardSnapshotParser from '@/data/boardSnapshotParser';
-import boardSerializer from '@/data/boardSerializer';
-
+import { getPossibleDestinations } from '@/helpers/getPossibleDestinations';
 import {
     getANCoords,
     getMoveFromAN,
 } from '@/helpers/stockfish';
-import { getPossibleDestinations } from '@/helpers/getPossibleDestinations';
-
 import {
     IBoardState,
     ICell,
@@ -19,7 +15,6 @@ import {
     IPiece,
     IMove,
 } from '@/store/modules/board/board';
-
 import boardMutations from '@/store/modules/board/board.mutations';
 
 @Module({
