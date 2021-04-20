@@ -18,7 +18,7 @@ import {
     ICellPosition,
     IPiece,
     IMove,
-} from '@/store/modules/board/board.d.ts';
+} from '@/store/modules/board/board';
 
 import boardMutations from '@/store/modules/board/board.mutations';
 
